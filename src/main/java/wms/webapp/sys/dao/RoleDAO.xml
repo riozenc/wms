@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.webapp.sys.dao.RoleDAO">
+	<select id="findByKey" parameterType="RoleDomain"
+		resultType="RoleDomain" useCache="true">
+		select ID,ROLE_NO,ROLE_NAME,REMARK,STATUS from ROLE_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="RoleDomain"
+		resultType="RoleDomain" useCache="true">
+		select ID,ROLE_NO,ROLE_NAME,REMARK,STATUS from ROLE_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="roleNo !=null">
+				and ROLE_NO = #{roleNo}
+			</if>
+			<if test="roleName !=null">
+				and ROLE_NAME = #{roleName}
+			</if>
+			<if test="remark !=null">
+				and REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="RoleDomain" flushCache="true">
+		insert into ROLE_INFO(ID,ROLE_NO,ROLE_NAME,REMARK,STATUS) values
+		(#{id},#{roleNo},#{roleName},#{remark},#{status})
+	</insert>
+	<update id="update" parameterType="RoleDomain" flushCache="true">
+		update ROLE_INFO
+		<set>
+			<if test="roleNo !=null">
+				ROLE_NO = #{roleNo},
+			</if>
+			<if test="roleName !=null">
+				ROLE_NAME = #{roleName},
+			</if>
+			<if test="remark !=null">
+				REMARK = #{remark},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+
+		</where>
+	</update>
+	<delete id="delete" parameterType="RoleDomain" flushCache="true">
+		delete from ROLE_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</delete>
+</mapper>

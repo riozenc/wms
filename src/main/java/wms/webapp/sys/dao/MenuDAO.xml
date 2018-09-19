@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.webapp.sys.dao.MenuDAO">
+	<select id="findByKey" parameterType="MenuDomain"
+		resultType="MenuDomain" useCache="true">
+		select ID,MENU_NAME,MENU_URL,PARENT_ID,IS_LEAF,STATUS,SORT_NO from
+		MENU_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="MenuDomain"
+		resultType="MenuDomain" useCache="true">
+		select ID,MENU_NAME,MENU_URL,PARENT_ID,IS_LEAF,STATUS,SORT_NO from
+		MENU_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="menuName !=null">
+				and MENU_NAME = #{menuName}
+			</if>
+			<if test="menuUrl !=null">
+				and MENU_URL = #{menuUrl}
+			</if>
+			<if test="parentId !=null">
+				and PARENT_ID = #{parentId}
+			</if>
+			<if test="isLeaf !=null">
+				and IS_LEAF = #{isLeaf}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+			<if test="sortNo !=null">
+				and SORT_NO = #{sortNo}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="MenuDomain" flushCache="true">
+		insert into
+		MENU_INFO(ID,MENU_NAME,MENU_URL,PARENT_ID,IS_LEAF,STATUS,SORT_NO)
+		values
+		(#{id},#{menuName},#{menuUrl},#{parentId},#{isLeaf},#{status},#{sortNo})
+	</insert>
+	<update id="update" parameterType="MenuDomain" flushCache="true">
+		update MENU_INFO
+		<set>
+			<if test="menuName !=null">
+				MENU_NAME = #{menuName},
+			</if>
+			<if test="menuUrl !=null">
+				MENU_URL = #{menuUrl},
+			</if>
+			<if test="parentId !=null">
+				PARENT_ID = #{parentId},
+			</if>
+			<if test="isLeaf !=null">
+				IS_LEAF = #{isLeaf},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+			<if test="sortNo !=null">
+				SORT_NO = #{sortNo},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+
+		</where>
+	</update>
+	<delete id="delete" parameterType="MenuDomain" flushCache="true">
+		delete from MENU_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</delete>
+
+
+	<select id="getMenu" parameterType="MenuDomain"
+		resultType="MenuDomain" useCache="true">
+		SELECT
+		a.ID,
+		a.MENU_NAME,
+		a.MENU_URL,
+		a.PARENT_ID,
+		a.IS_LEAF,
+		a.STATUS,
+		a.SORT_NO
+		FROM
+		MENU_INFO a
+		LEFT JOIN role_menu_rel b ON b.MENU_ID = a.ID
+		LEFT JOIN user_role_rel c ON c.ROLE_ID = b.ROLE_ID
+		<where>
+			a.STATUS = 1
+			<if test="parentId !=null">
+				and a.PARENT_ID = #{parentId}
+			</if>
+			<if test="userId !=null">
+				and c.USER_ID = #{userId}
+			</if>
+		</where>
+	</select>
+</mapper>

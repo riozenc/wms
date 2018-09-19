@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.webapp.wrk.dao.ProjectTaskDAO">
+	<select id="findByKey" parameterType="ProjectTaskDomain"
+		resultType="ProjectTaskDomain" useCache="true">
+		select ID,PROJECT_ID,TASK_ID,CREATE_DATE,OPERATOR_ID,STATUS from
+		PROJECT_TASK_REL
+		<where>
+			and ID = #{id}
+
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="ProjectTaskDomain"
+		resultType="ProjectTaskDomain" useCache="true">
+		select ID,PROJECT_ID,TASK_ID,CREATE_DATE,OPERATOR_ID,STATUS from
+		PROJECT_TASK_REL
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="projectId !=null">
+				and PROJECT_ID = #{projectId}
+			</if>
+			<if test="taskId !=null">
+				and TASK_ID = #{taskId}
+			</if>
+			<if test="createDate !=null">
+				and CREATE_DATE = #{createDate}
+			</if>
+			<if test="operatorId !=null">
+				and OPERATOR_ID = #{operatorId}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="ProjectTaskDomain"
+		flushCache="true">
+		insert into
+		PROJECT_TASK_REL(ID,PROJECT_ID,TASK_ID,CREATE_DATE,OPERATOR_ID,STATUS)
+		values
+		(#{id},#{projectId},#{taskId},#{createDate},#{operatorId},#{status})
+	</insert>
+	<update id="update" parameterType="ProjectTaskDomain"
+		flushCache="true">
+		update PROJECT_TASK_REL
+		<set>
+			<if test="projectId !=null">
+				PROJECT_ID = #{projectId},
+			</if>
+			<if test="taskId !=null">
+				TASK_ID = #{taskId},
+			</if>
+			<if test="createDate !=null">
+				CREATE_DATE = #{createDate},
+			</if>
+			<if test="operatorId !=null">
+				OPERATOR_ID = #{operatorId},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+
+		</where>
+	</update>
+	<delete id="delete" parameterType="ProjectTaskDomain"
+		flushCache="true">
+		delete from PROJECT_TASK_REL
+		<where>
+			and ID = #{id}
+
+		</where>
+	</delete>
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.webapp.wrk.dao.TaskDAO">
+	<select id="findByKey" parameterType="TaskDomain"
+		resultType="TaskDomain" useCache="true">
+		select
+		ID,TASK_NO,TASK_NAME,USER_ID,START_DATE,END_DATE,PLAN_DAYS,ACTUAL_DAYS,REMARK,STATUS
+		from TASK_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="TaskDomain"
+		resultType="TaskDomain" useCache="true">
+		select
+		ID,TASK_NO,TASK_NAME,USER_ID,START_DATE,END_DATE,PLAN_DAYS,ACTUAL_DAYS,REMARK,STATUS
+		from TASK_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="taskNo !=null">
+				and TASK_NO = #{taskNo}
+			</if>
+			<if test="taskName !=null">
+				and TASK_NAME = #{taskName}
+			</if>
+			<if test="userId !=null">
+			    and USER_ID = #{userId}
+			</if>
+			<if test="startDate !=null">
+				and START_DATE = #{startDate}
+			</if>
+			<if test="endDate !=null">
+				and END_DATE = #{endDate}
+			</if>
+			<if test="planDays !=null">
+				and PLAN_DAYS = #{planDays}
+			</if>
+			<if test="actualDays !=null">
+				and ACTUAL_DAYS = #{actualDays}
+			</if>
+			<if test="remark !=null">
+				and REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		parameterType="TaskDomain" flushCache="true">
+		insert into
+		TASK_INFO(ID,TASK_NO,TASK_NAME,USER_ID,START_DATE,END_DATE,PLAN_DAYS,ACTUAL_DAYS,REMARK,STATUS)
+		values
+		(#{id},#{taskNo},#{taskName},#{userId},#{startDate},#{endDate},#{planDays},#{actualDays},#{remark},#{status})
+	</insert>
+	<update id="update" parameterType="TaskDomain" flushCache="true">
+		update TASK_INFO
+		<set>
+			<if test="taskNo !=null">
+				TASK_NO = #{taskNo},
+			</if>
+			<if test="taskName !=null">
+				TASK_NAME = #{taskName},
+			</if>
+			<if test="userId !=null">
+			    USER_ID = #{userId},
+			</if>
+			<if test="startDate !=null">
+				START_DATE = #{startDate},
+			</if>
+			<if test="endDate !=null">
+				END_DATE = #{endDate},
+			</if>
+			<if test="planDays !=null">
+				PLAN_DAYS = #{planDays},
+			</if>
+			<if test="actualDays !=null">
+				ACTUAL_DAYS = #{actualDays},
+			</if>
+			<if test="remark !=null">
+				REMARK = #{remark},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+
+		</where>
+	</update>
+	<delete id="delete" parameterType="TaskDomain" flushCache="true">
+		delete from TASK_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</delete>
+
+
+	<insert id="insertTaskProjectRel" parameterType="TaskDomain"
+		flushCache="true">
+		insert into
+		project_task_rel(ID,PROJECT_ID,TASK_ID,CREATE_DATE,OPERATOR_ID,STATUS)
+		values
+		(#{id},#{taskNo},#{taskName},#{startDate},#{endDate},#{planDays},#{actualDays},#{remark},#{status})
+	</insert>
+
+
+
+	<select id="getTasksByProject" parameterType="ProjectDomain"
+		resultType="TaskDomain" useCache="true">
+		SELECT
+		a.*,d.USER_NAME
+		FROM
+		task_info a
+		LEFT JOIN project_task_rel b ON a.ID = b.TASK_ID
+		LEFT JOIN project_info c ON b.PROJECT_ID = c.ID
+		LEFT JOIN user_info d on a.USER_ID = d.USER_ID
+		<where>
+			<if test="id !=null">
+				and c.ID = #{id}
+			</if>
+			<if test="projectNo !=null">
+				and c.PROJECT_NO = #{projectNo}
+			</if>
+			<if test="projectName !=null">
+				and c.PROJECT_NAME = #{projectName}
+			</if>
+			<if test="startDate !=null">
+				and c.START_DATE = #{startDate}
+			</if>
+			<if test="endDate !=null">
+				and c.END_DATE = #{endDate}
+			</if>
+			<if test="planDays !=null">
+				and c.PLAN_DAYS = #{planDays}
+			</if>
+			<if test="actualDays !=null">
+				and c.ACTUAL_DAYS = #{actualDays}
+			</if>
+			<if test="remark !=null">
+				and c.REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and c.STATUS = #{status}
+			</if>
+		</where>
+	</select>
+</mapper>

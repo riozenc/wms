@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.webapp.wrk.dao.ProjectDAO">
+	<select id="findByKey" parameterType="ProjectDomain"
+		resultType="ProjectDomain" useCache="true">
+		select
+		ID,PROJECT_NO,PROJECT_NAME,START_DATE,END_DATE,PLAN_DAYS,ACTUAL_DAYS,REMARK,STATUS
+		from PROJECT_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="ProjectDomain"
+		resultType="ProjectDomain" useCache="true">
+		select
+		ID,PROJECT_NO,PROJECT_NAME,START_DATE,END_DATE,PLAN_DAYS,ACTUAL_DAYS,REMARK,STATUS
+		from PROJECT_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="projectNo !=null">
+				and PROJECT_NO = #{projectNo}
+			</if>
+			<if test="projectName !=null">
+				and PROJECT_NAME = #{projectName}
+			</if>
+			<if test="startDate !=null">
+				and START_DATE = #{startDate}
+			</if>
+			<if test="endDate !=null">
+				and END_DATE = #{endDate}
+			</if>
+			<if test="planDays !=null">
+				and PLAN_DAYS = #{planDays}
+			</if>
+			<if test="actualDays !=null">
+				and ACTUAL_DAYS = #{actualDays}
+			</if>
+			<if test="remark !=null">
+				and REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="ProjectDomain"
+		flushCache="true">
+		insert into
+		PROJECT_INFO(ID,PROJECT_NO,PROJECT_NAME,START_DATE,END_DATE,PLAN_DAYS,ACTUAL_DAYS,REMARK,STATUS)
+		values
+		(#{id},#{projectNo},#{projectName},#{startDate},#{endDate},#{planDays},#{actualDays},#{remark},#{status})
+	</insert>
+	<update id="update" parameterType="ProjectDomain"
+		flushCache="true">
+		update PROJECT_INFO
+		<set>
+			<if test="projectNo !=null">
+				PROJECT_NO = #{projectNo},
+			</if>
+			<if test="projectName !=null">
+				PROJECT_NAME = #{projectName},
+			</if>
+			<if test="startDate !=null">
+				START_DATE = #{startDate},
+			</if>
+			<if test="endDate !=null">
+				END_DATE = #{endDate},
+			</if>
+			<if test="planDays !=null">
+				PLAN_DAYS = #{planDays},
+			</if>
+			<if test="actualDays !=null">
+				ACTUAL_DAYS = #{actualDays},
+			</if>
+			<if test="remark !=null">
+				REMARK = #{remark},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+
+		</where>
+	</update>
+	<delete id="delete" parameterType="ProjectDomain"
+		flushCache="true">
+		delete from PROJECT_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</delete>
+</mapper>
