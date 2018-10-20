@@ -1,4 +1,4 @@
-Ext.define('cis.view.logo', {
+Ext.define('czy.view.logo', {
 	extend : 'Ext.Component',
 
 	alias : 'widget.logo',
@@ -7,7 +7,7 @@ Ext.define('cis.view.logo', {
 	width : '100%',
 	
 	padding : 1,
-	html : '<h2 align="center">欢迎使用	一体化管理系统</h2>',
+	html : '<h2 align="center">欢迎使用	项目管理系统</h2>',
 	region : 'north'
 
 });

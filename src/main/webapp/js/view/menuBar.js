@@ -1,4 +1,4 @@
-Ext.define('cis.view.menuBar', {
+Ext.define('czy.view.menuBar', {
 	extend : 'Ext.toolbar.Toolbar',
 
 	alias : 'widget.menuBar',
@@ -24,8 +24,7 @@ Ext.define('cis.view.menuBar', {
 	},
 
 	loadButton : function(menu) {
-		var button = Ext
-				.create('cis.custom.MenuButton', menu.id, menu.menuName);
+		var button = Ext.create('czy.custom.MenuButton', menu.id, menu.menuName);
 		this.add(button);
 	}
 

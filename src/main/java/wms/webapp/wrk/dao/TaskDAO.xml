@@ -27,7 +27,7 @@
 				and TASK_NAME = #{taskName}
 			</if>
 			<if test="userId !=null">
-			    and USER_ID = #{userId}
+				and USER_ID = #{userId}
 			</if>
 			<if test="startDate !=null">
 				and START_DATE = #{startDate}
@@ -66,7 +66,7 @@
 				TASK_NAME = #{taskName},
 			</if>
 			<if test="userId !=null">
-			    USER_ID = #{userId},
+				USER_ID = #{userId},
 			</if>
 			<if test="startDate !=null">
 				START_DATE = #{startDate},
@@ -117,9 +117,11 @@
 		a.*,d.USER_NAME
 		FROM
 		task_info a
-		LEFT JOIN project_task_rel b ON a.ID = b.TASK_ID
+		LEFT JOIN project_task_rel b ON
+		a.ID = b.TASK_ID
 		LEFT JOIN project_info c ON b.PROJECT_ID = c.ID
-		LEFT JOIN user_info d on a.USER_ID = d.USER_ID
+		LEFT
+		JOIN user_info d on a.USER_ID = d.USER_ID
 		<where>
 			<if test="id !=null">
 				and c.ID = #{id}
@@ -147,6 +149,27 @@
 			</if>
 			<if test="status !=null">
 				and c.STATUS = #{status}
+			</if>
+		</where>
+	</select>
+
+	<select id="getTasksByUser" parameterType="UserDomain"
+		resultType="TaskDomain" useCache="true">
+		SELECT
+		a.*,b.USER_NAME
+		FROM
+		task_info a
+		LEFT JOIN user_info b ON a.USER_ID
+		= b.USER_ID
+		<where>
+			<if test="id !=null">
+				and b.ID = #{id}
+			</if>
+			<if test="userId !=null">
+				and b.USER_ID = #{userId}
+			</if>
+			<if test="userName !=null">
+				and b.USER_NAME = #{userName}
 			</if>
 		</where>
 	</select>

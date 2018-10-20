@@ -13,411 +13,145 @@
 	href="scripts/build/classic/theme-crisp/resources/theme-crisp-all.css" />
 </head>
 
+<script type="text/javascript" src="js/view/basicDataLayout.js"></script>
+
 <script type="text/javascript">
-Ext.define('Writer.Form', {
-    extend: 'Ext.form.Panel',
-    alias: 'widget.writerform',
 
-    requires: ['Ext.form.field.Text'],
+Ext.onReady(function() {
 
-    initComponent: function(){
-        Ext.apply(this, {
-            activeRecord: null,
-            iconCls: 'icon-user',
-            frame: true,
-            title: 'User -- All fields are required',
-            defaultType: 'textfield',
-            bodyPadding: 5,
-            fieldDefaults: {
-                anchor: '100%',
-                labelAlign: 'right'
-            },
-            items: [{
-                fieldLabel: 'Email',
-                name: 'email',
-                allowBlank: false,
-                vtype: 'email'
-            }, {
-                fieldLabel: 'First',
-                name: 'first',
-                allowBlank: false
-            }, {
-                fieldLabel: 'Last',
-                name: 'last',
-                allowBlank: false
-            }],
-            dockedItems: [{
-                xtype: 'toolbar',
-                dock: 'bottom',
-                ui: 'footer',
-                items: ['->', {
-                    iconCls: 'icon-save',
-                    itemId: 'save',
-                    text: 'Save',
-                    disabled: true,
-                    scope: this,
-                    handler: this.onSave
-                }, {
-                    iconCls: 'icon-user-add',
-                    text: 'Create',
-                    scope: this,
-                    handler: this.onCreate
-                }, {
-                    iconCls: 'icon-reset',
-                    text: 'Reset',
-                    scope: this,
-                    handler: this.onReset
-                }]
-            }]
-        });
-        this.callParent();
-    },
+	
+	var selectButton = new Ext.button.Button({
+				text : '查询',
+				
+				scale : 'large',
+				handler : function() {
+					selectFunction(this);
+				}
+			});
 
-    setActiveRecord: function(record){
-        this.activeRecord = record;
-        if (record) {
-            this.down('#save').enable();
-            this.getForm().loadRecord(record);
-        } else {
-            this.down('#save').disable();
-            this.getForm().reset();
-        }
-    },
+	var tbarItems = [selectButton];
 
-    onSave: function(){
-        var active = this.activeRecord,
-            form = this.getForm();
+	var box = new cis.view.basicDataLayout({
 
-        if (!active) {
-            return;
-        }
-        if (form.isValid()) {
-            form.updateRecord(active);
-            this.onReset();
-        }
-    },
+				_formItems : [{
+							xtype : 'textfield',
+							id : 'id',
+							name : 'id',
+							labelAlign : 'right',
+							fieldLabel : '主机号',
+							labelWidth : 180
+						}, {
+							xtype : 'textfield',
+							id : 'name',
+							name : 'name',
+							labelAlign : 'right',
+							fieldLabel : '主机名',
+							labelWidth : 180
+						}, {
+							xtype : 'textfield',
+							id : 'operator',
+							name : 'operator',
+							labelAlign : 'right',
+							fieldLabel : '操作人',
+							labelWidth : 180
+						}, {
+							xtype : 'textfield',
+							id : 'workState',
+							name : 'workState',
+							labelAlign : 'right',
+							fieldLabel : '工作状态',
+							labelWidth : 180
+						}],
 
-    onCreate: function(){
-        var form = this.getForm();
+				_isCustomButton : true,
+				// 自定义按钮
+				_gridTbar : tbarItems,
 
-        if (form.isValid()) {
-            this.fireEvent('create', this, form.getValues());
-            form.reset();
-        }
+				_gridColumns : [
+					{
+						text : 'ID',
+						dataIndex : 'id'
+					}, {
+						text : '项目编号',
+						dataIndex : 'projectNo'
+					}, {
+						text : '项目名称',
+						dataIndex : 'projectName'
+					}, {
+						text : '启动时间',
+						dataIndex : 'startDate'
+					}, {
+						text : '结束时间',
+						dataIndex : 'endDate'
+					}, {
+						text : '计划日',
+						dataIndex : 'planDays'
+					}, {
+						text : '实际日',
+						dataIndex : 'actualDays'
+					}, {
+						text : '备注',
+						dataIndex : 'remark'
+					},{
+			            xtype: 'widgetcolumn',
+				        text:'操作',
+				        widget: {
+				            xtype: 'button',
+				            text: '任务清单',
+				            // handle a click on the button itself
+				            handler: function(me,e) {
+				            	var data = me.$widgetRecord.data;
+				            	var tabs = parent.Ext.getCmp('infoPanel');
+								tabs.loadPanel({'id':data.projectNo,'menuUrl':'task.do?method=index&projectId='+data.id,'text':data.projectName});
+				            },
+				        }
+			        }
+				],
 
-    },
+				_gridStore : Ext.create('Ext.data.Store', {
 
-    onReset: function(){
-        this.setActiveRecord(null);
-        this.getForm().reset();
-    }
+							autoDestroy : true,
+							pageSize : 15,
+							fields : [ 'id', 'projectNo', 'projectName', {
+								name : "startDate",
+								convert : function(v, record) {
+									//将一个long型的time转换为标准的日期对象
+									//此时V为一个long型的时间毫秒数
+									if (v != null && v != '') {
+										return Ext.util.Format.date(new Date(v), "Y-m-d");
+									}
+								}
+							}, {
+								name : "endDate",
+								convert : function(v, record) {
+									//将一个long型的time转换为标准的日期对象
+									//此时V为一个long型的时间毫秒数
+									if (v != null && v != '') {
+										return Ext.util.Format.date(new Date(v), "Y-m-d");
+									}
+								}
+							}, 'planDays', 'actualDays', 'remark' ],
+							proxy : {
+								type : 'ajax',
+								url : 'project.do?method=getProjects',
+								reader : {
+									type : 'json',
+									root : 'list'
+								}
+							}
+						})
+			});
+
+	box._grid.getStore().on('beforeload', function(store, operation) {
+				var value = box._form.getValues();
+				store.proxy.extraParams = value;
+			});
+
+
+	box.init({});
+
 });
-
-Ext.define('Writer.Grid', {
-    extend: 'Ext.grid.Panel',
-    alias: 'widget.writergrid',
-
-    requires: [
-        'Ext.grid.plugin.CellEditing',
-        'Ext.form.field.Text',
-        'Ext.toolbar.TextItem'
-    ],
-
-    initComponent: function () {
-        Ext.apply(this, {
-            iconCls: 'icon-grid',
-            frame: true,
-            plugins: {
-                cellediting: true
-            },
-            dockedItems: [{
-                xtype: 'toolbar',
-                items: [{
-                    iconCls: 'icon-add',
-                    text: 'Add',
-                    scope: this,
-                    handler: this.onAddClick
-                }, {
-                    iconCls: 'icon-delete',
-                    text: 'Delete',
-                    disabled: true,
-                    itemId: 'delete',
-                    scope: this,
-                    handler: this.onDeleteClick
-                }]
-            }, {
-                weight: 2,
-                xtype: 'toolbar',
-                dock: 'bottom',
-                items: [{
-                    xtype: 'tbtext',
-                    text: '<b>@cfg</b>'
-                }, '|', {
-                    text: 'autoSync',
-                    enableToggle: true,
-                    pressed: true,
-                    tooltip: 'When enabled, Store will execute Ajax requests as soon as a Record becomes dirty.',
-                    scope: this,
-                    toggleHandler: function(btn, pressed){
-                        this.store.autoSync = pressed;
-                    }
-                }, {
-                    text: 'batch',
-                    enableToggle: true,
-                    pressed: true,
-                    tooltip: 'When enabled, Store will batch all records for each type of CRUD verb into a single Ajax request.',
-                    scope: this,
-                    toggleHandler: function(btn, pressed){
-                        this.store.getProxy().batchActions = pressed;
-                    }
-                }, {
-                    text: 'writeAllFields',
-                    enableToggle: true,
-                    pressed: false,
-                    tooltip: 'When enabled, Writer will write *all* fields to the server -- not just those that changed.',
-                    scope: this,
-                    toggleHandler: function(btn, pressed){
-                        this.store.getProxy().getWriter().writeAllFields = pressed;
-                    }
-                }]
-            }, {
-                weight: 1,
-                xtype: 'toolbar',
-                dock: 'bottom',
-                ui: 'footer',
-                items: ['->', {
-                    iconCls: 'icon-save',
-                    text: 'Sync',
-                    scope: this,
-                    handler: this.onSync
-                }]
-            }],
-            columns: [{
-                text: 'ID',
-                width: 40,
-                sortable: true,
-                resizable: false,
-                draggable: false,
-                hideable: false,
-                menuDisabled: true,
-                dataIndex: 'id',
-                renderer: function(value){
-                    return Ext.isNumber(value) ? value : '&nbsp;';
-                }
-            }, {
-                header: 'Email',
-                flex: 1,
-                sortable: true,
-                dataIndex: 'email',
-                field: {
-                    type: 'textfield'
-                }
-            }, {
-                header: 'First',
-                width: 100,
-                sortable: true,
-                dataIndex: 'first',
-                field: {
-                    type: 'textfield'
-                }
-            }, {
-                header: 'Last',
-                width: 100,
-                sortable: true,
-                dataIndex: 'last',
-                field: {
-                    type: 'textfield'
-                }
-            }]
-        });
-        this.callParent();
-        this.getSelectionModel().on('selectionchange', this.onSelectChange, this);
-    },
-    
-    onSelectChange: function(selModel, selections){
-        this.down('#delete').setDisabled(selections.length === 0);
-    },
-
-    onSync: function(){
-        this.store.sync();
-    },
-
-    onDeleteClick: function(){
-        var selection = this.getView().getSelectionModel().getSelection()[0];
-        if (selection) {
-            this.store.remove(selection);
-        }
-    },
-
-    onAddClick: function(){
-        var rec = new Writer.Person({
-                first: '',
-                last: '',
-                email: ''
-            }),
-            edit = this.findPlugin('cellediting');
-
-        edit.cancelEdit();
-        this.store.insert(0, rec);
-        edit.startEditByPosition({
-            row: rec,
-            column: 1
-        });
-    }
-});
-
-Ext.define('Writer.Person', {
-    extend: 'Ext.data.Model',
-    fields: [{
-        name: 'id',
-        type: 'int',
-        useNull: true
-    }, 'email', 'first', 'last'],
-    validators: {
-        email: {
-            type: 'length',
-            min: 1
-        },
-        first: {
-            type: 'length',
-            min: 1
-        },
-        last: {
-            type: 'length',
-            min: 1
-        }
-    }
-});
-
-Ext.require([
-    'Ext.data.*',
-    'Ext.tip.QuickTipManager',
-    'Ext.window.MessageBox'
-]);
-
-Ext.onReady(function(){
-    Ext.tip.QuickTipManager.init();
-    
-    Ext.create('Ext.button.Button', {
-        margin: '0 0 20 20',
-        text: 'Reset sample database back to initial state',
-        renderTo: document.body,
-        tooltip: 'The sample database is stored in the session, including any changes you make. Click this button to reset the sample database to the initial state',
-        handler: function(){
-            Ext.getBody().mask('Resetting...');
-            Ext.Ajax.request({
-                url: 'app.php/example/reset',
-                callback: function(options, success, response) {
-                    Ext.getBody().unmask();
-                    
-                    var didReset = true,
-                        o;
-                    
-                    if (success) {
-                        try {
-                            o = Ext.decode(response.responseText);
-                            didReset = o.success === true;
-                        } catch (e) {
-                            didReset = false;
-                        }
-                    } else {
-                        didReset = false;
-                    }
-                    
-                    if (didReset) {
-                        store.load();
-                        main.down('#form').setActiveRecord(null);
-                        Ext.example.msg('Reset', 'Reset successful');
-                    } else {
-                        Ext.MessageBox.alert('Error', 'Unable to reset example database');
-                    }
-                    
-                }
-            });
-        }
-    });
-    
-    var store = Ext.create('Ext.data.Store', {
-        model: 'Writer.Person',
-        autoLoad: true,
-        autoSync: true,
-        proxy: {
-            type: 'ajax',
-            api: {
-                read: 'app.php/users/view',
-                create: 'app.php/users/create',
-                update: 'app.php/users/update',
-                destroy: 'app.php/users/destroy'
-            },
-            reader: {
-                type: 'json',
-                successProperty: 'success',
-                root: 'data',
-                messageProperty: 'message'
-            },
-            writer: {
-                type: 'json',
-                writeAllFields: false,
-                root: 'data'
-            },
-            listeners: {
-                exception: function(proxy, response, operation){
-                    Ext.MessageBox.show({
-                        title: 'REMOTE EXCEPTION',
-                        msg: operation.getError(),
-                        icon: Ext.MessageBox.ERROR,
-                        buttons: Ext.Msg.OK
-                    });
-                }
-            }
-        },
-        listeners: {
-            write: function(proxy, operation){
-                if (operation.action == 'destroy') {
-                    main.child('#form').setActiveRecord(null);
-                }
-                Ext.example.msg(operation.action, operation.getResultSet().message);
-            }
-        }
-    });
-
-    var main = Ext.create('Ext.container.Container', {
-        padding: '0 0 0 20',
-        width: 500,
-        height: Ext.themeName === 'neptune' ? 700 : 650,
-        renderTo: document.body,
-        layout: {
-            type: 'vbox',
-            align: 'stretch'
-        },
-        items: [{
-            itemId: 'form',
-            xtype: 'writerform',
-            manageHeight: false,
-            margin: '0 0 10 0',
-            listeners: {
-                create: function(form, data){
-                    store.insert(0, data);
-                }
-            }
-        }, {
-            itemId: 'grid',
-            xtype: 'writergrid',
-            title: 'User List',
-            flex: 1,
-            store: store,
-            listeners: {
-                selectionchange: function(selModel, selected) {
-                    main.child('#form').setActiveRecord(selected[0] || null);
-                }
-            }
-        }]
-    });
-});
-
-
 </script>
 <body>
-
 </body>
 </html>

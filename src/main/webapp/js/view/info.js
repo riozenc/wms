@@ -1,4 +1,4 @@
-Ext.define('cis.view.info', {
+Ext.define('czy.view.info', {
 	extend : 'Ext.tab.Panel',
 
 	id : 'infoPanel',

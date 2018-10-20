@@ -11,6 +11,7 @@ import com.riozenc.quicktool.annotation.TransactionDAO;
 import com.riozenc.quicktool.mybatis.dao.AbstractTransactionDAOSupport;
 import com.riozenc.quicktool.mybatis.dao.BaseDAO;
 
+import wms.webapp.sys.domain.UserDomain;
 import wms.webapp.wrk.domain.ProjectDomain;
 import wms.webapp.wrk.domain.TaskDomain;
 
@@ -47,7 +48,11 @@ public class TaskDAO extends AbstractTransactionDAOSupport implements BaseDAO<Ta
 		return getPersistanceManager().update(getNamespace() + ".update", arg0);
 	}
 
-	public List<TaskDomain> getTasksByProject(ProjectDomain projectDomain){
+	public List<TaskDomain> getTasksByProject(ProjectDomain projectDomain) {
 		return getPersistanceManager().find(getNamespace() + ".getTasksByProject", projectDomain);
+	}
+
+	public List<TaskDomain> getTasksByUser(UserDomain userDomain) {
+		return getPersistanceManager().find(getNamespace() + ".getTasksByUser", userDomain);
 	}
 }

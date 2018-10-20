@@ -1,4 +1,4 @@
-Ext.define('cis.view.main', {
+Ext.define('czy.view.main', {
 	extend : 'Ext.container.Viewport',
 
 	alias : 'widget.main',

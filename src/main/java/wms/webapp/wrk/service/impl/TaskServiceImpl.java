@@ -14,6 +14,7 @@ import com.riozenc.quicktool.annotation.TransactionDAO;
 import com.riozenc.quicktool.annotation.TransactionService;
 import com.riozenc.quicktool.shiro.Principal;
 
+import wms.webapp.sys.domain.UserDomain;
 import wms.webapp.wrk.dao.ProjectTaskDAO;
 import wms.webapp.wrk.dao.TaskDAO;
 import wms.webapp.wrk.domain.ProjectDomain;
@@ -77,6 +78,12 @@ public class TaskServiceImpl implements ITaskService {
 	public List<TaskDomain> getTasksByProject(ProjectDomain projectDomain) {
 		// TODO Auto-generated method stub
 		return taskDAO.getTasksByProject(projectDomain);
+	}
+
+	@Override
+	public List<TaskDomain> getTasksByUser(UserDomain userDomain) {
+		// TODO Auto-generated method stub
+		return taskDAO.getTasksByUser(userDomain);
 	}
 
 }

@@ -18,7 +18,7 @@
 <script type="text/javascript" src="js/custom/ajax_timeout.js"></script>
 <link rel="stylesheet" type="text/css" href="scripts/build/classic/theme-crisp/resources/theme-crisp-all.css"/>
 
-<script type="text/javascript" src="app1.js"></script>
+<script type="text/javascript" src="app.js"></script>
 
 </head>
 <body>

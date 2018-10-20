@@ -1,4 +1,4 @@
-Ext.define('cis.view.button', {
+Ext.define('czy.view.button', {
 	extend : 'Ext.button.Button',
 
 	alias : 'widget.menuButton',

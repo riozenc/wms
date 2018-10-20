@@ -1,4 +1,4 @@
-Ext.define('cis.view.menu', {
+Ext.define('czy.view.menu', {
 			extend : 'Ext.tree.Panel',
 
 			alias : 'widget.menu',

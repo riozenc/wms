@@ -1,13 +1,12 @@
-Ext.define('cis.view.basicDataLayout', {
+Ext.define('js.custom.basicDataLayout', {
 	extend : 'Ext.panel.Panel',
 
 	id : 'panel',
 	alias : 'widget.basicDataLayout',
-
 	layout : {
 		type : 'vbox',
 		align : 'stretch',
-		padding : 5
+		padding : 5,
 	},
 
 	constructor : function(config) {
@@ -18,73 +17,23 @@ Ext.define('cis.view.basicDataLayout', {
 		var _gridColumns = config._gridColumns;
 
 		var selectButton = new Ext.button.Button({
-					text : '查询',
-					id : 'selectButton',
-					handler : config._selectButton || function() {
-						this.up("panel").getStore().currentPage = 1;
-						this.up("panel").getStore().load();
-					}
-				});
+			text : '查询',
+			id : 'selectButton',
+			handler :  function(me) {
+				if (me.up("panel").up("panel")._form.isValid()) {
+					me.up("panel").getStore().currentPage = 1;
+					me.up("panel").getStore().reload();
+				} else {
+					alert("查询条件有误,请仔细检查");
+				}
+			}
+		});
 
-		var addButton = new Ext.button.Button({
-					text : '新增',
-					id : 'addButton',
-					handler : config._addButton
-				});
-
-		var modifyButton = new Ext.button.Button({
-					text : '修改',
-					id : 'modifyButton',
-					handler : config._modifyButton
-				});
-
-		var deleteButton = new Ext.button.Button({
-					text : '删除',
-					id : 'deleteButton',
-					handler : config._deleteButton || function() {
-						var r = this.up("panel").getSelectionModel()
-								.getSelection();
-						this.up("panel").getStore().remove(r);
-					}
-				});
-
-		var _isCustomButton = config._isCustomButton || false;
-		var _defButton = config._defaultButton;
 		var _gridTbar = config._gridTbar || new Array();
 
 		var createGridButton = function() {
-			if (!_isCustomButton) {
-				// 自定义按钮
-				if (_defButton) {
-
-					var add = Math.pow(2, 0);// 新增
-					var del = Math.pow(2, 1);// 删除
-					var mod = Math.pow(2, 2);// 修改
-					var aud = Math.pow(2, 3);// 查询
-
-					if ((_defButton & add) > 0) {
-						_gridTbar.push(addButton);
-						_gridTbar.push('-');
-					};
-					if ((_defButton & del) > 0) {
-						_gridTbar.push(deleteButton);
-						_gridTbar.push('-');
-					};
-					if ((_defButton & mod) > 0) {
-						_gridTbar.push(modifyButton);
-						_gridTbar.push('-');
-					};
-					if ((_defButton & aud) > 0) {
-						_gridTbar.push(selectButton);
-						_gridTbar.push('-');
-					};
-
-					_gridTbar.pop();
-
-				}
-			} else {
-
-			};
+			_gridTbar.push('-');
+			_gridTbar.push(selectButton);
 			return _gridTbar;
 		};
 
@@ -145,6 +94,12 @@ Ext.define('cis.view.basicDataLayout', {
 						pack : 'center',
 						align : 'middle'
 					},
+					
+					defaults: { // defaults are applied to items, not the container
+						labelAlign : 'right',
+						padding:'0 0 0 10'
+					},
+
 					items : _formItems,
 					flex : 1
 				});
@@ -165,14 +120,16 @@ Ext.define('cis.view.basicDataLayout', {
 				|| (this.randomId + '-baseViewportId');
 
 		this.me = this;
+		
+		
+		var viewport = Ext.create('Ext.container.Viewport', {
+			id : this.baseViewportId,
+			layout : 'fit',
+			items : [this.me]
+		});
 
-		var viewport = new Ext.Viewport({
-					id : this.baseViewportId,
-					layout : 'fit',
-					items : [this.me]
-				});
-
-		viewport.doLayout();
+	
+		
 	}
 
 });
@@ -215,13 +172,3 @@ var creatDeriveButton = function(url) {
 				}
 			});
 };
-// 查询方法
-function selectFunction(me) {
-	var form = me.up("panel").up("panel")._form;
-	if (form.isValid()) {
-		me.up("panel").getStore().currentPage = 1;
-		me.up("panel").getStore().load();
-	} else {
-		alert("查询条件有误,请仔细检查");
-	}
-}

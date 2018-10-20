@@ -1,4 +1,4 @@
-Ext.define('cis.view.bottom', {
+Ext.define('czy.view.bottom', {
 			extend : 'Ext.toolbar.Toolbar',
 			padding : 10,
 			alias : 'widget.bottom',

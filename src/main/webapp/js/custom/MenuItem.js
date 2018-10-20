@@ -1,4 +1,4 @@
-Ext.define('cis.custom.MenuItem', {
+Ext.define('czy.custom.MenuItem', {
 	extend : 'Ext.menu.Item',
 	alias : 'widget.MenuItem',
 
@@ -48,7 +48,7 @@ Ext.define('cis.custom.MenuItem', {
 	},
 
 	addMenu : function(menu) {
-		this.getMenu().add(Ext.create('cis.custom.MenuItem', menu));
+		this.getMenu().add(Ext.create('czy.custom.MenuItem', menu));
 	}
 
 });

@@ -1,7 +1,7 @@
-Ext.define('cis.controller.mainController', {
+Ext.define('czy.controller.mainController', {
 	extend : 'Ext.app.Controller',
-	views : ['logo', 'info', 'bottom', 'menuBar', 'button', 'basicDataLayout'],
-	requires: ['cis.custom.MenuButton','cis.custom.MenuItem'],
+	views : ['logo', 'info', 'bottom', 'menuBar', 'button'],
+	requires: ['czy.custom.MenuButton','czy.custom.MenuItem'],
 	
 
 	addNewTab : function(id, title, url) {
