@@ -5,70 +5,79 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<script type="text/javascript" src="scripts/ext-bootstrap.js"></script>
+<script type="text/javascript"
+	src="scripts/build/classic/locale/locale-zh_CN.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="scripts/build/classic/theme-crisp/resources/theme-crisp-all.css" />
+
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/echarts.js"></script>
 
+
+
+
 </head>
 
-<body style="height: 100%; margin: 0">
-	<div id="container" style="height: 100%"></div>
 
-	<script type="text/javascript">
+<script type="text/javascript">
+	function createEchart(startDate,endDate) {
 		var dom = document.getElementById("container");
-		var myChart = echarts.init(dom);
-
-		$.get('chart.do?method=getJson', function(rawData) {
-
-			
-
-			option = makeOption(rawData);
-
-			var item = makeSeries(rawData);
-			option.series = item;
-
-			myChart.setOption(option);
-		});
+		var myChart;
+		$.ajax({
+			 url:"chart.do?method=getJson",
+			 type:"post",
+			 data:{
+				 startDate : startDate,
+				 endDate : endDate,
+			 },
+			success:function(rawData){
+				myChart= echarts.init(dom);
+				myChart.clear();
+				option = makeOption(rawData);
+				var item = makeSeries(rawData);
+				option.series = item;
+				myChart.setOption(option);
+			}
+	 
+		 });
 
 		function makeSeries(rawData) {
 			var series = [];
-			
 			series[0] = {
-					name : "辅助",
-					type : "bar",
-					stack : "总",
-					itemStyle : {
-						normal : {
-							barBorderColor : 'rgba(0,0,0,0)',
-							color : 'rgba(0,0,0,0)'
-						},
-						emphasis : {
-							barBorderColor : 'rgba(0,0,0,0)',
-							color : 'rgba(0,0,0,0)'
-						}
+				name : "辅助",
+				type : "bar",
+				stack : "总",
+				itemStyle : {
+					normal : {
+						barBorderColor : 'rgba(0,0,0,0)',
+						color : 'rgba(0,0,0,0)'
 					},
-					data : rawData.blankData,
-					//data : [ 0, 0, 0, 0, 0, 0, 0 ]
+					emphasis : {
+						barBorderColor : 'rgba(0,0,0,0)',
+						color : 'rgba(0,0,0,0)'
+					}
+				},
+				data : rawData.blankData,
+			//data : [ 0, 0, 0, 0, 0, 0, 0 ]
 			};
-			
 			for (j = 0, len = rawData.yAxisData.length; j < len; j++) {
-				series[j+1] = makeSeriesDate(rawData.yAxisData[j],
+				series[j + 1] = makeSeriesDate(rawData.yAxisData[j],
 						rawData.planStartData[j], rawData.actualStartData[j],
-						j, len);
+						rawData.users[j], j, len);
 			}
-
 			return series;
-		};
+		}
+		;
 
-		function makeSeriesDate(name, b, c, index, length) {
-			
-			// 			name : "项目确定",
-			// 			type : "bar",
-			// 			stack : "总",
+		function makeSeriesDate(name, planStartData, actualStartData, user,
+				index, length) {
 
 			var array = new Array();
 			for (i = 0; i < length; i++) {
 				if (i == index) {
-					array.push(b);
+					array.push(planStartData);
 				} else {
 					array.push(0);
 				}
@@ -78,25 +87,26 @@
 				name : name,
 				type : "bar",
 				stack : "总",
-				data : array
+				data : array,
+				user : user
 			};
 		}
 
 		function makeOption(rawData) {
 
-			var startDate = rawData.startDate;
-			var endDate = rawData.endDate;
+			var _startDate = rawData.startDate;
+			var _endDate = rawData.endDate;
 			var xAxisDate = new Array();
-			while (endDate >= startDate) {
-				var date = new Date(startDate);
+			while (_endDate >= _startDate) {
+				var date = new Date(_startDate);
 				var date_time = (date.getFullYear() + "-"
 						+ (date.getMonth() + 1) + "-" + date.getDate());
 				xAxisDate.push(date_time);
-				startDate = startDate + 1 * 24 * 60 * 60 * 1000;
+				_startDate = _startDate + 1 * 24 * 60 * 60 * 1000;
 			}
 
 			return {
-
+				rawData : rawData,
 				title : {
 					text : rawData.title,
 					x : 'center'
@@ -126,9 +136,10 @@
 							show : true
 						}
 					},
-					formatter : function(params,a,b,c) {
-						debugger;
-						return params.name + '<br/>计划时间 : ' + params.data + '天';
+					formatter : function(params, a, b, c) {
+						return option.series[params.dataIndex + 1].user
+								+ '<br/>' + params.name + '<br/>计划时间 : '
+								+ params.data + '天';
 					}
 				},
 				axis : {
@@ -155,61 +166,71 @@
 						}
 					},
 				} ],
-// 				series : [ {
-// 					name : "辅助",
-// 					type : "bar",
-// 					stack : "总",
-// 					itemStyle : {
-// 						normal : {
-// 							barBorderColor : 'rgba(0,0,0,0)',
-// 							color : 'rgba(0,0,0,0)'
-// 						},
-// 						emphasis : {
-// 							barBorderColor : 'rgba(0,0,0,0)',
-// 							color : 'rgba(0,0,0,0)'
-// 						}
-// 					},
-// 					// 					data : rawData.planStartData,
-// 					data : [ 0, 1, 2, 3, 4, 5, 6 ]
-// 				}, {
-// 					name : "项目确定",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 1, 0, 0, 0, 0, 0, 0 ]
-// 				}, {
-// 					name : "问卷设计",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 0, 1, 0, 0, 0, 0, 0 ]
-// 				}, {
-// 					name : "试访",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 0, 0, 2, 0, 0, 0, 0 ]
-// 				}, {
-// 					name : "问卷确定",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 0, 0, 0, 1, 0, 0, 0 ]
-// 				}, {
-// 					name : "实地执行",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 0, 0, 0, 0, 4, 0, 0 ]
-// 				}, {
-// 					name : "数据录入",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 0, 0, 0, 0, 0, 1, 0 ]
-// 				}, {
-// 					name : "数据分析",
-// 					type : "bar",
-// 					stack : "总",
-// 					data : [ 0, 0, 0, 0, 0, 0, 3 ]
-// 				} ]
 			}
 		}
-	</script>
-</body>
+	};
+
+	Ext.onReady(function() {
+		var panel = Ext.create("Ext.panel.Panel", {
+			layout : {
+				type : 'vbox',
+				align : 'stretch',
+				padding : 5,
+			},
+
+			items : [ new Ext.form.Panel({
+				id : 'formPanel',
+				layout : {
+					type : 'hbox',
+					pack : 'center',
+					align : 'middle'
+				},
+				
+				defaults: { // defaults are applied to items, not the container
+					labelAlign : 'right',
+					padding:'0 0 0 10'
+				},
+
+				items : [ {
+					xtype : 'datefield',
+					fieldLabel : '开始时间',
+					name : 'startDate',
+					format: 'Y-m-d',
+				}, {
+					xtype : 'datefield',
+					fieldLabel : '结束时间',
+					name : 'endDate',
+					format: 'Y-m-d',
+				}],
+				flex : 1
+			}),{
+				xtype : 'splitter'
+			}, {
+				xtype: 'button',
+				text: 'Click me',
+			    renderTo: Ext.getBody(),
+			    handler: function() {
+			    	var params=Ext.getCmp("formPanel").getValues();
+			    	createEchart(params.startDate,params.endDate);
+			    }
+			},{
+				xtype : 'splitter'
+			}, Ext.create("Ext.panel.Panel",{
+				title:'cc',
+				flex: 3,
+				html:'<div id="container" style="width:100%;height:100%"></div>'
+			})],
+		});
+
+		var viewport = Ext.create('Ext.container.Viewport', {
+			id : this.baseViewportId,
+			layout : 'fit',
+			items : [ panel ]
+		});
+
+	});
+	
+</script>
+
 
 </html>

@@ -27,7 +27,7 @@ public class ProjectAction extends BaseAction {
 	@Override
 	public String getIndex() {
 		// TODO Auto-generated method stub
-		return "project1.jsp";
+		return "project.jsp";
 	}
 	
 	@Autowired

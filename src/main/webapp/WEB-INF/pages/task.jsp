@@ -17,6 +17,38 @@
 	Ext.require('js.custom.basicDataLayout');
 	Ext.onReady(function() {
 		
+		
+	Ext.override(Ext.grid.GridPanel, {
+		afterRender : Ext.Function.createSequence(Ext.grid.GridPanel.prototype.afterRender,function() {
+
+	        /* 默认显示提示
+	        if (!this.cellTip) {
+	            return;
+	        }*/
+	        var view = this.getView();
+	        
+	        this.tip = new Ext.ToolTip({
+	            target: view.el,
+	            delegate : '.x-grid-cell-inner',
+	            trackMouse: true, 
+	            renderTo: Ext.getBody(),  
+	            listeners: {
+	                beforeshow: function updateTipBody(tip) {
+	                    //取cell的值
+	                    //fireFox  tip.triggerElement.textContent
+	                    //IE  tip.triggerElement.innerText 
+	                    var tipText = (tip.triggerElement.innerText || tip.triggerElement.textContent);
+	                    if (Ext.isEmpty(tipText) || Ext.isEmpty(tipText.trim()) ) {
+	                        return false;
+	                   }
+	                    tip.update(tipText);
+	                }
+	            }
+	        });
+	    
+		})
+	});
+		
 		//url地址参数
 		var params = Ext.urlDecode(location.search.substring(1));
 		var userDropStore = Ext.create("Ext.data.Store", {
@@ -131,9 +163,9 @@
 									success : function(response,config) {
 										Ext.MessageBox.hide();
 										var json = Ext.JSON.decode(response.responseText);
-										if (json.success) {
-											Ext.MessageBox.alert('提示',json.msg);
-											ExtgetCmp("addWindow").close();
+										if (json.statusCode==200) {
+											Ext.MessageBox.alert('提示',json.message);
+											Ext.getCmp("addWindow").close();
 											reload();
 										} else {
 											Ext.MessageBox.alert('提示',json.msg);
@@ -197,7 +229,8 @@
 					dataIndex : 'actualDays'
 				}, {
 					text : '备注',
-					dataIndex : 'remark'
+					dataIndex : 'remark',
+		
 				}
 			],
 

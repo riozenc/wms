@@ -61,7 +61,6 @@ Ext.define('js.custom.basicDataLayout', {
 
 				forceFit: true,
 
-
 				// store: Ext.data.StoreManager.lookup('simpsonsStore'),
 
 				bbar : [{
@@ -113,23 +112,14 @@ Ext.define('js.custom.basicDataLayout', {
 	},
 
 	init : function() {
-
 		this.randomId = Ext.id();
-
 		this.baseViewportId = arguments[0].baseViewportId
 				|| (this.randomId + '-baseViewportId');
-
-		this.me = this;
-		
-		
 		var viewport = Ext.create('Ext.container.Viewport', {
 			id : this.baseViewportId,
 			layout : 'fit',
-			items : [this.me]
+			items : [this]
 		});
-
-	
-		
 	}
 
 });

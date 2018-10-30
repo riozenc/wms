@@ -6,6 +6,7 @@
 package wms.webapp.wrk.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.riozenc.quicktool.annotation.TransactionDAO;
 import com.riozenc.quicktool.mybatis.dao.AbstractTransactionDAOSupport;
@@ -54,5 +55,9 @@ public class TaskDAO extends AbstractTransactionDAOSupport implements BaseDAO<Ta
 
 	public List<TaskDomain> getTasksByUser(UserDomain userDomain) {
 		return getPersistanceManager().find(getNamespace() + ".getTasksByUser", userDomain);
+	}
+	
+	public List<TaskDomain> getTasksByMap(Map<String,Object> params){
+		return getPersistanceManager().find(getNamespace() + ".getTasksByMap", params);
 	}
 }

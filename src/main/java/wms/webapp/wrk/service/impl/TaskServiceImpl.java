@@ -7,6 +7,7 @@ package wms.webapp.wrk.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 
@@ -84,6 +85,12 @@ public class TaskServiceImpl implements ITaskService {
 	public List<TaskDomain> getTasksByUser(UserDomain userDomain) {
 		// TODO Auto-generated method stub
 		return taskDAO.getTasksByUser(userDomain);
+	}
+
+	@Override
+	public List<TaskDomain> getTasksByMap(Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return taskDAO.getTasksByMap(params);
 	}
 
 }

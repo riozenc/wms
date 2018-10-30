@@ -6,6 +6,7 @@
 package wms.webapp.wrk.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.riozenc.quicktool.springmvc.webapp.service.BaseService;
 
@@ -18,7 +19,8 @@ public interface ITaskService extends BaseService<TaskDomain> {
 	public int insert(TaskDomain taskDomain, Long projectId);
 
 	public List<TaskDomain> getTasksByProject(ProjectDomain projectDomain);
-	
+
 	public List<TaskDomain> getTasksByUser(UserDomain userDomain);
+
+	public List<TaskDomain> getTasksByMap(Map<String, Object> params);
 }
- 
