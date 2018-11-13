@@ -177,11 +177,14 @@
 					text : '结束时间',
 					dataIndex : 'endDate'
 				}, {
-					text : '计划日',
-					dataIndex : 'planDays'
+					text : '总任务',
+					dataIndex : 'totalTasks'
 				}, {
-					text : '实际日',
-					dataIndex : 'actualDays'
+					text : '已完成',
+					dataIndex : 'completedTasks'
+				}, {
+					text : '未完成',
+					dataIndex : 'unfinishedTasks'
 				}, {
 					text : '备注',
 					dataIndex : 'remark'
@@ -231,7 +234,10 @@
 						type : 'json',
 						rootProperty : 'list'
 					}
-				}
+				},
+				callback : function(record, options, success) {  
+			          
+		        }  
 			})
 		});
 
@@ -239,6 +245,27 @@
 		box._grid.getStore().on('beforeload', function(store, operation) {
 			var value = box._form.getValues();
 			store.proxy.extraParams = value;
+		});
+		
+		box._grid.getStore().on('load', function(me, records, successful, operation, eOpts) {
+			 Ext.each(records, function(record) {
+				 Ext.Ajax.request({
+				     url: 'project.do?method=getProjectInfo',
+				     params : {
+							id : record.id
+						},
+				     success: function(response, opts) {
+				         var obj = Ext.decode(response.responseText);
+				         box._grid.getStore().findRecord('id',record.id).data.totalTasks = obj.totalTasks;
+				         box._grid.getStore().findRecord('id',record.id).data.completedTasks = obj.completedTasks;
+				         box._grid.getStore().findRecord('id',record.id).data.unfinishedTasks = obj.unfinishedTasks;
+				         box._grid.getStore().findRecord('id',record.id).commit();
+				     },
+				     failure: function(response, opts) {
+				         console.log('server-side failure with status code ' + response.status);
+				     }
+				 });
+             });
 		});
 		
 		box.init({});

@@ -92,8 +92,8 @@
 		a.SORT_NO
 		FROM
 		MENU_INFO a
-		LEFT JOIN role_menu_rel b ON b.MENU_ID = a.ID
-		LEFT JOIN user_role_rel c ON c.ROLE_ID = b.ROLE_ID
+		LEFT JOIN ROLE_MENU_REL b ON b.MENU_ID = a.ID
+		LEFT JOIN USER_ROLE_REL c ON c.ROLE_ID = b.ROLE_ID
 		<where>
 			a.STATUS = 1
 			<if test="parentId !=null">

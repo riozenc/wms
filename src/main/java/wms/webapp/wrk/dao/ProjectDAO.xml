@@ -95,4 +95,46 @@
 
 		</where>
 	</delete>
+
+	<select id="getProjects" parameterType="ProjectDomain"
+		resultType="ProjectDomain" useCache="true">
+		SELECT
+		a.ID,a.PROJECT_NO,a.PROJECT_NAME,a.START_DATE,a.END_DATE,a.PLAN_DAYS,a.ACTUAL_DAYS,a.REMARK,a.STATUS,
+		count(c.id) as TOTAL_TASKS
+		FROM
+		PROJECT_INFO a
+		RIGHT JOIN PROJECT_TASK_REL b ON a.ID =
+		b.PROJECT_ID
+		RIGHT JOIN TASK_INFO c ON b.TASK_ID = c.ID
+		<where>
+			<if test="id !=null">
+				and a.ID = #{id}
+			</if>
+			<if test="projectNo !=null">
+				and a.PROJECT_NO = #{projectNo}
+			</if>
+			<if test="projectName !=null">
+				and a.PROJECT_NAME = #{projectName}
+			</if>
+			<if test="startDate !=null">
+				and a.START_DATE = #{startDate}
+			</if>
+			<if test="endDate !=null">
+				and a.END_DATE = #{endDate}
+			</if>
+			<if test="planDays !=null">
+				and a.PLAN_DAYS = #{planDays}
+			</if>
+			<if test="actualDays !=null">
+				and a.ACTUAL_DAYS = #{actualDays}
+			</if>
+			<if test="remark !=null">
+				and a.REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and a.STATUS = #{status}
+			</if>
+		</where>
+		GROUP BY a.ID
+	</select>
 </mapper>

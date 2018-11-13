@@ -17,139 +17,98 @@
 
 <script type="text/javascript">
 
-Ext.onReady(function() {
-
-	
-	var selectButton = new Ext.button.Button({
-				text : '查询',
-				
-				scale : 'large',
-				handler : function() {
-					selectFunction(this);
-				}
-			});
-
-	var tbarItems = [selectButton];
-
-	var box = new cis.view.basicDataLayout({
-
-				_formItems : [{
-							xtype : 'textfield',
-							id : 'id',
-							name : 'id',
-							labelAlign : 'right',
-							fieldLabel : '主机号',
-							labelWidth : 180
-						}, {
-							xtype : 'textfield',
-							id : 'name',
-							name : 'name',
-							labelAlign : 'right',
-							fieldLabel : '主机名',
-							labelWidth : 180
-						}, {
-							xtype : 'textfield',
-							id : 'operator',
-							name : 'operator',
-							labelAlign : 'right',
-							fieldLabel : '操作人',
-							labelWidth : 180
-						}, {
-							xtype : 'textfield',
-							id : 'workState',
-							name : 'workState',
-							labelAlign : 'right',
-							fieldLabel : '工作状态',
-							labelWidth : 180
-						}],
-
-				_isCustomButton : true,
-				// 自定义按钮
-				_gridTbar : tbarItems,
-
-				_gridColumns : [
-					{
-						text : 'ID',
-						dataIndex : 'id'
-					}, {
-						text : '项目编号',
-						dataIndex : 'projectNo'
-					}, {
-						text : '项目名称',
-						dataIndex : 'projectName'
-					}, {
-						text : '启动时间',
-						dataIndex : 'startDate'
-					}, {
-						text : '结束时间',
-						dataIndex : 'endDate'
-					}, {
-						text : '计划日',
-						dataIndex : 'planDays'
-					}, {
-						text : '实际日',
-						dataIndex : 'actualDays'
-					}, {
-						text : '备注',
-						dataIndex : 'remark'
-					},{
-			            xtype: 'widgetcolumn',
-				        text:'操作',
-				        widget: {
-				            xtype: 'button',
-				            text: '任务清单',
-				            // handle a click on the button itself
-				            handler: function(me,e) {
-				            	var data = me.$widgetRecord.data;
-				            	var tabs = parent.Ext.getCmp('infoPanel');
-								tabs.loadPanel({'id':data.projectNo,'menuUrl':'task.do?method=index&projectId='+data.id,'text':data.projectName});
-				            },
-				        }
-			        }
-				],
-
-				_gridStore : Ext.create('Ext.data.Store', {
-
-							autoDestroy : true,
-							pageSize : 15,
-							fields : [ 'id', 'projectNo', 'projectName', {
-								name : "startDate",
-								convert : function(v, record) {
-									//将一个long型的time转换为标准的日期对象
-									//此时V为一个long型的时间毫秒数
-									if (v != null && v != '') {
-										return Ext.util.Format.date(new Date(v), "Y-m-d");
-									}
-								}
-							}, {
-								name : "endDate",
-								convert : function(v, record) {
-									//将一个long型的time转换为标准的日期对象
-									//此时V为一个long型的时间毫秒数
-									if (v != null && v != '') {
-										return Ext.util.Format.date(new Date(v), "Y-m-d");
-									}
-								}
-							}, 'planDays', 'actualDays', 'remark' ],
-							proxy : {
-								type : 'ajax',
-								url : 'project.do?method=getProjects',
-								reader : {
-									type : 'json',
-									root : 'list'
-								}
-							}
-						})
-			});
-
-	box._grid.getStore().on('beforeload', function(store, operation) {
-				var value = box._form.getValues();
-				store.proxy.extraParams = value;
-			});
+Ext.require([
+    'Ext.grid.*',
+    'Ext.data.*',
+    'Ext.form.field.Number',
+    'Ext.form.field.Date',
+    'Ext.tip.QuickTipManager'
+]);
 
 
-	box.init({});
 
+
+
+Ext.onReady(function(){
+
+   // Ext.tip.QuickTipManager.init();
+    
+    
+    var store = Ext.create('Ext.data.Store', {
+		autoLoad : true,
+		autoDestroy : true,
+		pageSize : 15,
+		fields : [ 'id', 'projectNo', 'taskNo', 'taskName', 'createDate', 'planDays', 'remark', 'status'],
+
+		proxy : {
+			type : 'ajax',
+			url : 'rewardTask.do?method=getTasks',
+			extraParams : {
+				name : 'czy',
+			},
+			reader : {
+				type : 'json',
+				rootProperty : 'list',
+				totalProperty : 'totalRow'
+			}
+		},
+		
+		sorters: {property: 'id', direction: 'ASC'},
+        groupField: 'projectNo'
+	});
+
+
+    var grid = Ext.create('Ext.grid.Panel', {
+        width: 840,
+        height: 450,
+        frame: true,
+        title: 'Sponsored Projects',
+        iconCls: 'icon-grid',
+        renderTo: document.body,
+        store: store,
+        plugins: {
+            cellediting: {
+                clicksToEdit: 1
+            }
+        },
+        dockedItems: [{
+            dock: 'top',
+            xtype: 'toolbar',
+            items: [{
+                tooltip: 'Toggle the visibility of the summary row',
+                text: 'Toggle Summary',
+                enableToggle: true,
+                pressed: true,
+                handler: function() {
+                    grid.getView().getFeature('group').toggleSummaryRow();
+                }
+            }]
+        }],
+        features: [{
+            id: 'group',
+            ftype: 'groupingsummary',
+            groupHeaderTpl: '{name}',
+            hideGroupedHeader: true,
+            enableGroupingMenu: false
+        }],
+        columns: [{
+            text: 'Task',
+            flex: 1,
+            tdCls: 'task',
+            sortable: true,
+            dataIndex: 'taskName',
+            hideable: false,
+            summaryType: 'count',
+            summaryRenderer: function(value, summaryData, dataIndex) {
+                return ((value === 0 || value > 1) ? '(' + value + ' Tasks)' : '(1 Task)');
+            }
+        }, {
+            header: 'Project',
+            width: 180,
+            sortable: true,
+            dataIndex: 'projectNo'
+        }]
+    });
 });
 </script>
 <body>

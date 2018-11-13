@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.webapp.rtm.dao.RewardTaskDAO">
+	<select id="findByKey" parameterType="RewardTaskDomain"
+		resultType="RewardTaskDomain" useCache="true">
+		select
+		ID,PROJECT_NO,TASK_NO,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS
+		from REWARD_TASK_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</select>
+	<select id="findByWhere" parameterType="RewardTaskDomain"
+		resultType="RewardTaskDomain" useCache="true">
+		select
+		ID,PROJECT_NO,TASK_NO,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS
+		from REWARD_TASK_INFO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="projectNo !=null">
+				and PROJECT_NO = #{projectNo}
+			</if>
+			<if test="taskNo !=null">
+				and TASK_NO = #{taskNo}
+			</if>
+			<if test="taskName !=null">
+				and TASK_NAME = #{taskName}
+			</if>
+			<if test="createDate !=null">
+				and CREATE_DATE = #{createDate}
+			</if>
+			<if test="planDays !=null">
+				and PLAN_DAYS = #{planDays}
+			</if>
+			<if test="remark !=null">
+				and REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="insert" parameterType="RewardTaskDomain"
+		flushCache="true">
+		insert into
+		REWARD_TASK_INFO(ID,PROJECT_NO,TASK_NO,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS)
+		values
+		(#{id},#{projectNo},#{taskNo},#{taskName},#{createDate},#{planDays},#{remark},#{status})
+	</insert>
+	<update id="update" parameterType="RewardTaskDomain"
+		flushCache="true">
+		update REWARD_TASK_INFO
+		<set>
+			<if test="projectNo !=null">
+				PROJECT_NO = #{projectNo},
+			</if>
+			<if test="taskNo !=null">
+				TASK_NO = #{taskNo},
+			</if>
+			<if test="taskName !=null">
+				TASK_NAME = #{taskName},
+			</if>
+			<if test="createDate !=null">
+				CREATE_DATE = #{createDate},
+			</if>
+			<if test="planDays !=null">
+				PLAN_DAYS = #{planDays},
+			</if>
+			<if test="remark !=null">
+				REMARK = #{remark},
+			</if>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+
+		</where>
+	</update>
+	<delete id="delete" parameterType="RewardTaskDomain"
+		flushCache="true">
+		delete from REWARD_TASK_INFO
+		<where>
+			and ID = #{id}
+
+		</where>
+	</delete>
+
+	<select id="getRewardTasks" parameterType="RewardTaskDomain"
+		resultType="RewardTaskDomain" useCache="true">
+		SELECT
+		REWARD_TASK_INFO.ID,
+		REWARD_TASK_INFO.PROJECT_NO,
+		PROJECT_INFO.PROJECT_NAME,
+		REWARD_TASK_INFO.TASK_NO,
+		REWARD_TASK_INFO.TASK_NAME,
+		REWARD_TASK_INFO.CREATE_DATE,
+		REWARD_TASK_INFO.PLAN_DAYS,
+		REWARD_TASK_INFO.REMARK,
+		REWARD_TASK_INFO. STATUS
+		FROM
+		REWARD_TASK_INFO
+		LEFT JOIN PROJECT_INFO ON REWARD_TASK_INFO.PROJECT_NO =
+		PROJECT_INFO.PROJECT_NO
+		<where>
+			<if test="id !=null">
+				and ID = #{id}
+			</if>
+			<if test="projectNo !=null">
+				and PROJECT_NO = #{projectNo}
+			</if>
+			<if test="taskNo !=null">
+				and TASK_NO = #{taskNo}
+			</if>
+			<if test="taskName !=null">
+				and TASK_NAME = #{taskName}
+			</if>
+			<if test="createDate !=null">
+				and CREATE_DATE = #{createDate}
+			</if>
+			<if test="planDays !=null">
+				and PLAN_DAYS = #{planDays}
+			</if>
+			<if test="remark !=null">
+				and REMARK = #{remark}
+			</if>
+			<if test="status !=null">
+				and STATUS = #{status}
+			</if>
+		</where>
+	</select>
+</mapper>

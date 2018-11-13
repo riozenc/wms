@@ -11,7 +11,7 @@ import com.riozenc.quicktool.annotation.TablePrimaryKey;
 import com.riozenc.quicktool.mybatis.MybatisEntity;
 import com.riozenc.quicktool.mybatis.persistence.Page;
 
-public class ProjectDomain extends Page implements MybatisEntity{
+public class ProjectDomain extends Page implements MybatisEntity {
 	@TablePrimaryKey
 	private Long id;
 	private String projectNo;
@@ -22,6 +22,10 @@ public class ProjectDomain extends Page implements MybatisEntity{
 	private Integer actualDays;
 	private String remark;
 	private Byte status;
+
+	private Long totalTasks;// 总任务数量
+	private Long completedTasks;// 已完成任务数量
+	private Long unfinishedTasks;// 未完成任务数量
 
 	public Long getId() {
 		return id;
@@ -93,6 +97,30 @@ public class ProjectDomain extends Page implements MybatisEntity{
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	public Long getTotalTasks() {
+		return totalTasks;
+	}
+
+	public void setTotalTasks(Long totalTasks) {
+		this.totalTasks = totalTasks;
+	}
+
+	public Long getCompletedTasks() {
+		return completedTasks;
+	}
+
+	public void setCompletedTasks(Long completedTasks) {
+		this.completedTasks = completedTasks;
+	}
+
+	public Long getUnfinishedTasks() {
+		return unfinishedTasks;
+	}
+
+	public void setUnfinishedTasks(Long unfinishedTasks) {
+		this.unfinishedTasks = unfinishedTasks;
 	}
 
 }

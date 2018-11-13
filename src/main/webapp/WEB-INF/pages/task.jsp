@@ -17,37 +17,38 @@
 	Ext.require('js.custom.basicDataLayout');
 	Ext.onReady(function() {
 		
-		
-	Ext.override(Ext.grid.GridPanel, {
-		afterRender : Ext.Function.createSequence(Ext.grid.GridPanel.prototype.afterRender,function() {
+		//备注，鼠标指向浮现信息
+		Ext.override(Ext.grid.GridPanel, {
+			afterRender : Ext.Function.createSequence(Ext.grid.GridPanel.prototype.afterRender,function() {
 
-	        /* 默认显示提示
-	        if (!this.cellTip) {
-	            return;
-	        }*/
-	        var view = this.getView();
-	        
-	        this.tip = new Ext.ToolTip({
-	            target: view.el,
-	            delegate : '.x-grid-cell-inner',
-	            trackMouse: true, 
-	            renderTo: Ext.getBody(),  
-	            listeners: {
-	                beforeshow: function updateTipBody(tip) {
-	                    //取cell的值
-	                    //fireFox  tip.triggerElement.textContent
-	                    //IE  tip.triggerElement.innerText 
-	                    var tipText = (tip.triggerElement.innerText || tip.triggerElement.textContent);
-	                    if (Ext.isEmpty(tipText) || Ext.isEmpty(tipText.trim()) ) {
-	                        return false;
-	                   }
-	                    tip.update(tipText);
-	                }
-	            }
-	        });
-	    
-		})
-	});
+		        /* 默认显示提示
+		        if (!this.cellTip) {
+		            return;
+		        }*/
+		        var view = this.getView();
+		        
+		        this.tip = new Ext.ToolTip({
+		            target: view.el,
+		            delegate : '.x-grid-cell-inner',
+		            trackMouse: true, 
+		            renderTo: Ext.getBody(),  
+		            listeners: {
+		                beforeshow: function updateTipBody(tip) {
+		                    //取cell的值
+		                    //fireFox  tip.triggerElement.textContent
+		                    //IE  tip.triggerElement.innerText 
+		                    var tipText = (tip.triggerElement.innerText || tip.triggerElement.textContent);
+		                    if (Ext.isEmpty(tipText) || Ext.isEmpty(tipText.trim()) ) {
+		                        return false;
+		                   }
+		                    tip.update(tipText);
+		                }
+		            }
+		        });
+		    
+			})
+		});
+		
 		
 		//url地址参数
 		var params = Ext.urlDecode(location.search.substring(1));
@@ -106,20 +107,22 @@
 							fieldLabel : '计划天数',
 							name : 'planDays',
 						}]
-					},{
-						xtype: 'container',
-						layout: 'hbox',
-						anchor: '50%',
-						items : [{
-							xtype : 'combobox',
-							fieldLabel : '负责人',
-							name : 'userId',
-							store : userDropStore,
-							queryMode : 'local',
-							displayField : 'userName',
-							valueField : 'userId',
-						}]
-					},{
+					},
+// 					{
+// 						xtype: 'container',
+// 						layout: 'hbox',
+// 						anchor: '50%',
+// 						items : [{
+// 							xtype : 'combobox',
+// 							fieldLabel : '负责人',
+// 							name : 'userId',
+// 							store : userDropStore,
+// 							queryMode : 'local',
+// 							displayField : 'userName',
+// 							valueField : 'userId',
+// 						}]
+// 					},
+					{
 						xtype: 'container',
 						layout: 'hbox',
 						items : [{
@@ -188,8 +191,17 @@
 			}
 		});
 		
+		var releaseButton = Ext.create('Ext.Button',{
+			id : 'releaseButton',
+			text : '发布',
+			handler : function() {
+				
+				
+			}
+		});
+		
 		var box = Ext.create('js.custom.basicDataLayout', {
-			_gridTbar : [addButton],
+			_gridTbar : [addButton,releaseButton],
 			
 			_formItems : [ {
 				xtype : 'datefield',
@@ -230,7 +242,6 @@
 				}, {
 					text : '备注',
 					dataIndex : 'remark',
-		
 				}
 			],
 
@@ -274,13 +285,12 @@
 				},
 			})
 		});
-
-
+		
 		box._grid.getStore().on('beforeload', function(store, operation) {
 			var value = box._form.getValues();
 			store.proxy.extraParams = value;
 		});
-		
+				
 		box.init({});
 
 	});

@@ -61,7 +61,26 @@ Ext.define('js.custom.basicDataLayout', {
 
 				forceFit: true,
 
-				// store: Ext.data.StoreManager.lookup('simpsonsStore'),
+//				dockedItems: [{
+//		            dock: 'top',
+//		            xtype: 'toolbar',
+//		            items: [{
+//		                tooltip: 'Toggle the visibility of the summary row',
+//		                text: 'Toggle Summary',
+//		                enableToggle: true,
+//		                pressed: true,
+//		                handler: function() {
+//		                    grid.getView().getFeature('group').toggleSummaryRow();
+//		                }
+//		            }]
+//		        }],
+		        features: [{
+		            id: 'group',
+		            ftype: 'groupingsummary',
+		            groupHeaderTpl: '{name}',
+		            hideGroupedHeader: true,
+		            enableGroupingMenu: false
+		        }],
 
 				bbar : [{
 					xtype : 'pagingtoolbar',

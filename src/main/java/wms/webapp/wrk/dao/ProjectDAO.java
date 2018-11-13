@@ -47,5 +47,13 @@ public class ProjectDAO extends AbstractTransactionDAOSupport implements BaseDAO
 		// TODO Auto-generated method stub
 		return getPersistanceManager().update(getNamespace() + ".update", arg0);
 	}
+	
+	public List<ProjectDomain> getProjects(ProjectDomain projectDomain){
+		return getPersistanceManager().find(getNamespace() + ".findByWhere", projectDomain);
+	}
 
+	public ProjectDomain getProjectInfo(ProjectDomain projectDomain) {
+		// TODO Auto-generated method stub
+		return getPersistanceManager().load(getNamespace() + ".getProjectInfo", projectDomain);
+	}
 }

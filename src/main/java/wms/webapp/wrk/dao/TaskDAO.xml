@@ -104,7 +104,7 @@
 	<insert id="insertTaskProjectRel" parameterType="TaskDomain"
 		flushCache="true">
 		insert into
-		project_task_rel(ID,PROJECT_ID,TASK_ID,CREATE_DATE,OPERATOR_ID,STATUS)
+		PROJECT_TASK_REL(ID,PROJECT_ID,TASK_ID,CREATE_DATE,OPERATOR_ID,STATUS)
 		values
 		(#{id},#{taskNo},#{taskName},#{startDate},#{endDate},#{planDays},#{actualDays},#{remark},#{status})
 	</insert>
@@ -116,12 +116,12 @@
 		SELECT
 		a.*,d.USER_NAME
 		FROM
-		task_info a
-		LEFT JOIN project_task_rel b ON
+		TASK_INFO a
+		LEFT JOIN PROJECT_TASK_REL b ON
 		a.ID = b.TASK_ID
-		LEFT JOIN project_info c ON b.PROJECT_ID = c.ID
+		LEFT JOIN PROJECT_INFO c ON b.PROJECT_ID = c.ID
 		LEFT
-		JOIN user_info d on a.USER_ID = d.USER_ID
+		JOIN USER_INFO d on a.USER_ID = d.USER_ID
 		<where>
 			<if test="id !=null">
 				and c.ID = #{id}
@@ -158,8 +158,8 @@
 		SELECT
 		a.*,b.USER_NAME
 		FROM
-		task_info a
-		LEFT JOIN user_info b ON a.USER_ID
+		TASK_INFO a
+		LEFT JOIN USER_INFO b ON a.USER_ID
 		= b.USER_ID
 		<where>
 			<if test="id !=null">
@@ -178,8 +178,8 @@
 		SELECT
 		a.*,b.USER_NAME
 		FROM
-		task_info a
-		LEFT JOIN user_info b ON a.USER_ID
+		TASK_INFO a
+		LEFT JOIN USER_INFO b ON a.USER_ID
 		= b.USER_ID
 		<where>
 			<if test="startDate !=null">

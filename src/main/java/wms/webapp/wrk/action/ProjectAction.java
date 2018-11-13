@@ -20,7 +20,7 @@ import wms.web.result.HttpResult;
 import wms.webapp.wrk.domain.ProjectDomain;
 import wms.webapp.wrk.service.IProjectService;
 
-@ControllerAdvice(assignableTypes=ProjectAction.class)
+@ControllerAdvice(assignableTypes = ProjectAction.class)
 @RequestMapping("project")
 public class ProjectAction extends BaseAction {
 
@@ -29,18 +29,24 @@ public class ProjectAction extends BaseAction {
 		// TODO Auto-generated method stub
 		return "project.jsp";
 	}
-	
+
 	@Autowired
 	@Qualifier("projectServiceImpl")
 	private IProjectService projectService;
 
 	@ResponseBody
 	@RequestMapping(params = "method=getProjects")
-	public Object getProjectInfo(ProjectDomain projectDomain) {
-
+	public Object getProjects(ProjectDomain projectDomain) {
 		List<ProjectDomain> list = projectService.findByWhere(projectDomain);
 		PageResult pageResult = new PageResult(projectDomain, list);
 		return pageResult;
+	}
+	
+	@ResponseBody
+	@RequestMapping(params = "method=getProjectInfo")
+	public Object getProjectInfo(ProjectDomain projectDomain) {
+		projectDomain = projectService.getProjectInfo(projectDomain);
+		return projectDomain;
 	}
 
 	@ResponseBody
