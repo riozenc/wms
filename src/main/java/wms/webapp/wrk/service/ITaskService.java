@@ -23,4 +23,6 @@ public interface ITaskService extends BaseService<TaskDomain> {
 	public List<TaskDomain> getTasksByUser(UserDomain userDomain);
 
 	public List<TaskDomain> getTasksByMap(Map<String, Object> params);
+
+	public int releaseRewardTasks(List<TaskDomain> taskDomains);
 }

@@ -5,14 +5,20 @@
  **/
 package wms.webapp.wrk.action;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.riozenc.quicktool.common.util.json.JSONUtil;
 import com.riozenc.quicktool.springmvc.webapp.action.BaseAction;
 
 import wms.web.result.HttpResult;
@@ -20,7 +26,7 @@ import wms.webapp.wrk.domain.ProjectDomain;
 import wms.webapp.wrk.domain.TaskDomain;
 import wms.webapp.wrk.service.ITaskService;
 
-@ControllerAdvice(assignableTypes=TaskAction.class)
+@ControllerAdvice(assignableTypes = TaskAction.class)
 @RequestMapping("task")
 public class TaskAction extends BaseAction {
 	@Override
@@ -56,6 +62,17 @@ public class TaskAction extends BaseAction {
 
 		List<TaskDomain> list = taskService.getTasksByProject(projectDomain);
 		return list;
+	}
+
+	@ResponseBody
+	@RequestMapping(params = "method=releaseTasks")
+	public Object releaseTasks(@RequestBody String data) throws JsonParseException, JsonMappingException, IOException {
+
+		List<TaskDomain> taskDomains = JSONUtil.readValue(data, new TypeReference<List<TaskDomain>>() {
+		});
+		int count = taskService.releaseRewardTasks(taskDomains);
+
+		return count;
 	}
 
 }

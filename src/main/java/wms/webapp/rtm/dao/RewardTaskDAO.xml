@@ -4,7 +4,7 @@
 	<select id="findByKey" parameterType="RewardTaskDomain"
 		resultType="RewardTaskDomain" useCache="true">
 		select
-		ID,PROJECT_NO,TASK_NO,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS
+		ID,PROJECT_ID,TASK_ID,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS,PROJECT_NAME,USER_NAME
 		from REWARD_TASK_INFO
 		<where>
 			and ID = #{id}
@@ -14,17 +14,17 @@
 	<select id="findByWhere" parameterType="RewardTaskDomain"
 		resultType="RewardTaskDomain" useCache="true">
 		select
-		ID,PROJECT_NO,TASK_NO,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS
+		ID,PROJECT_ID,TASK_ID,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS,PROJECT_NAME,USER_NAME
 		from REWARD_TASK_INFO
 		<where>
 			<if test="id !=null">
 				and ID = #{id}
 			</if>
-			<if test="projectNo !=null">
-				and PROJECT_NO = #{projectNo}
+			<if test="projectId !=null">
+				and PROJECT_ID = #{projectId}
 			</if>
-			<if test="taskNo !=null">
-				and TASK_NO = #{taskNo}
+			<if test="taskId !=null">
+				and TASK_ID = #{taskId}
 			</if>
 			<if test="taskName !=null">
 				and TASK_NAME = #{taskName}
@@ -41,24 +41,30 @@
 			<if test="status !=null">
 				and STATUS = #{status}
 			</if>
+			<if test="projectName !=null">
+				and PROJECT_NAME = #{projectName}
+			</if>
+			<if test="userName !=null">
+				and USER_NAME = #{userName}
+			</if>
 		</where>
 	</select>
 	<insert id="insert" parameterType="RewardTaskDomain"
 		flushCache="true">
 		insert into
-		REWARD_TASK_INFO(ID,PROJECT_NO,TASK_NO,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS)
+		REWARD_TASK_INFO(ID,PROJECT_ID,TASK_ID,TASK_NAME,CREATE_DATE,PLAN_DAYS,REMARK,STATUS,PROJECT_NAME,USER_NAME)
 		values
-		(#{id},#{projectNo},#{taskNo},#{taskName},#{createDate},#{planDays},#{remark},#{status})
+		(#{id},#{projectId},#{taskId},#{taskName},#{createDate},#{planDays},#{remark},#{status},#{projectName},#{userName})
 	</insert>
 	<update id="update" parameterType="RewardTaskDomain"
 		flushCache="true">
 		update REWARD_TASK_INFO
 		<set>
-			<if test="projectNo !=null">
-				PROJECT_NO = #{projectNo},
+			<if test="projectId !=null">
+				PROJECT_ID = #{projectId},
 			</if>
-			<if test="taskNo !=null">
-				TASK_NO = #{taskNo},
+			<if test="taskId !=null">
+				TASK_ID = #{taskId},
 			</if>
 			<if test="taskName !=null">
 				TASK_NAME = #{taskName},
@@ -74,6 +80,12 @@
 			</if>
 			<if test="status !=null">
 				STATUS = #{status},
+			</if>
+			<if test="projectName !=null">
+				PROJECT_NAME = #{projectName},
+			</if>
+			<if test="userName !=null">
+				USER_NAME = #{userName},
 			</if>
 		</set>
 		<where>
@@ -94,42 +106,44 @@
 		resultType="RewardTaskDomain" useCache="true">
 		SELECT
 		REWARD_TASK_INFO.ID,
-		REWARD_TASK_INFO.PROJECT_NO,
+		REWARD_TASK_INFO.PROJECT_ID,
 		PROJECT_INFO.PROJECT_NAME,
-		REWARD_TASK_INFO.TASK_NO,
+		REWARD_TASK_INFO.TASK_ID,
 		REWARD_TASK_INFO.TASK_NAME,
 		REWARD_TASK_INFO.CREATE_DATE,
 		REWARD_TASK_INFO.PLAN_DAYS,
 		REWARD_TASK_INFO.REMARK,
-		REWARD_TASK_INFO. STATUS
+		REWARD_TASK_INFO.
+		STATUS
 		FROM
 		REWARD_TASK_INFO
-		LEFT JOIN PROJECT_INFO ON REWARD_TASK_INFO.PROJECT_NO =
-		PROJECT_INFO.PROJECT_NO
+		LEFT JOIN PROJECT_INFO ON
+		REWARD_TASK_INFO.PROJECT_ID =
+		PROJECT_INFO.ID
 		<where>
 			<if test="id !=null">
-				and ID = #{id}
+				and REWARD_TASK_INFO.ID = #{id}
 			</if>
-			<if test="projectNo !=null">
-				and PROJECT_NO = #{projectNo}
+			<if test="projectId !=null">
+				and REWARD_TASK_INFO.PROJECT_ID = #{projectId}
 			</if>
-			<if test="taskNo !=null">
-				and TASK_NO = #{taskNo}
+			<if test="taskId !=null">
+				and REWARD_TASK_INFO.TASK_ID = #{taskId}
 			</if>
 			<if test="taskName !=null">
-				and TASK_NAME = #{taskName}
+				and REWARD_TASK_INFO.TASK_NAME = #{taskName}
 			</if>
 			<if test="createDate !=null">
-				and CREATE_DATE = #{createDate}
+				and REWARD_TASK_INFO.CREATE_DATE = #{createDate}
 			</if>
 			<if test="planDays !=null">
-				and PLAN_DAYS = #{planDays}
+				and REWARD_TASK_INFO.PLAN_DAYS = #{planDays}
 			</if>
 			<if test="remark !=null">
-				and REMARK = #{remark}
+				and REWARD_TASK_INFO.REMARK = #{remark}
 			</if>
 			<if test="status !=null">
-				and STATUS = #{status}
+				and REWARD_TASK_INFO.STATUS = #{status}
 			</if>
 		</where>
 	</select>

@@ -8,10 +8,13 @@ package wms.webapp.wrk.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.ExecutorType;
+
 import com.riozenc.quicktool.annotation.TransactionDAO;
 import com.riozenc.quicktool.mybatis.dao.AbstractTransactionDAOSupport;
 import com.riozenc.quicktool.mybatis.dao.BaseDAO;
 
+import wms.webapp.rtm.domain.RewardTaskDomain;
 import wms.webapp.sys.domain.UserDomain;
 import wms.webapp.wrk.domain.ProjectDomain;
 import wms.webapp.wrk.domain.TaskDomain;
@@ -56,8 +59,18 @@ public class TaskDAO extends AbstractTransactionDAOSupport implements BaseDAO<Ta
 	public List<TaskDomain> getTasksByUser(UserDomain userDomain) {
 		return getPersistanceManager().find(getNamespace() + ".getTasksByUser", userDomain);
 	}
-	
-	public List<TaskDomain> getTasksByMap(Map<String,Object> params){
+
+	public List<TaskDomain> getTasksByMap(Map<String, Object> params) {
 		return getPersistanceManager().find(getNamespace() + ".getTasksByMap", params);
 	}
+
+	public int release(List<TaskDomain> taskDomains) {
+		return getPersistanceManager(ExecutorType.BATCH).updateList(getNamespace() + ".release", taskDomains);
+	}
+
+	public int releaseRewardTasks(List<RewardTaskDomain> rewardTaskDomains) {
+		return getPersistanceManager(ExecutorType.BATCH).insertList(getNamespace() + ".releaseRewardTasks",
+				rewardTaskDomains);
+	}
+
 }

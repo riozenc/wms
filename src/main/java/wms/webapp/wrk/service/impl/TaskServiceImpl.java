@@ -5,9 +5,11 @@
  **/
 package wms.webapp.wrk.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.shiro.SecurityUtils;
 
@@ -15,6 +17,7 @@ import com.riozenc.quicktool.annotation.TransactionDAO;
 import com.riozenc.quicktool.annotation.TransactionService;
 import com.riozenc.quicktool.shiro.Principal;
 
+import wms.webapp.rtm.domain.RewardTaskDomain;
 import wms.webapp.sys.domain.UserDomain;
 import wms.webapp.wrk.dao.ProjectTaskDAO;
 import wms.webapp.wrk.dao.TaskDAO;
@@ -64,7 +67,7 @@ public class TaskServiceImpl implements ITaskService {
 	@Override
 	public int insert(TaskDomain taskDomain, Long projectId) {
 		// TODO Auto-generated method stub
-		
+
 		taskDAO.insert(taskDomain);
 		ProjectTaskDomain projectTaskDomain = new ProjectTaskDomain();
 		projectTaskDomain.setTaskId(taskDomain.getId());
@@ -93,4 +96,26 @@ public class TaskServiceImpl implements ITaskService {
 		return taskDAO.getTasksByMap(params);
 	}
 
+	/**
+	 * 任务 N->R 悬赏 0->1
+	 */
+	@Override
+	public int releaseRewardTasks(List<TaskDomain> taskDomains) {
+		// TODO Auto-generated method stub
+		List<RewardTaskDomain> list = new ArrayList<>();
+		Stream<TaskDomain> stream = taskDomains.stream().filter(TaskDomain::isNoR);
+
+		if (stream.count() == 0) {
+			return 0;
+		}
+		stream.forEach(task -> {
+			task.setStatus(TaskDomain.TASK_STATUS.R.getStatus());
+			RewardTaskDomain rewardTaskDomain = new RewardTaskDomain();
+			rewardTaskDomain.setId(task.getId());
+			rewardTaskDomain.setCreateDate(new Date());
+			list.add(rewardTaskDomain);
+		});
+		taskDAO.release(taskDomains);
+		return taskDAO.releaseRewardTasks(list);
+	}
 }

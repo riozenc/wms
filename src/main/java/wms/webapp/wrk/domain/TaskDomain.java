@@ -12,6 +12,20 @@ import com.riozenc.quicktool.annotation.TablePrimaryKey;
 import com.riozenc.quicktool.mybatis.MybatisEntity;
 
 public class TaskDomain implements MybatisEntity {
+
+	public enum TASK_STATUS {
+		C((byte) 0), N((byte) 1), R((byte) 2);
+		private final Byte status;
+
+		private TASK_STATUS(Byte status) {
+			this.status = status;
+		}
+
+		public Byte getStatus() {
+			return status;
+		}
+	}
+
 	@TablePrimaryKey
 	private Long id;
 	private String taskNo;
@@ -22,7 +36,7 @@ public class TaskDomain implements MybatisEntity {
 	private Integer planDays;
 	private Integer actualDays;
 	private String remark;
-	private Byte status;
+	private Byte status;// 0失效 1录入 2发布中
 
 	@ReflectionIgnore
 	private String userName;
@@ -115,5 +129,8 @@ public class TaskDomain implements MybatisEntity {
 		this.userName = userName;
 	}
 
-	
+	public boolean isNoR() {
+		return this.status != TASK_STATUS.R.getStatus();
+	}
+
 }

@@ -13,4 +13,5 @@ import wms.webapp.rtm.domain.RewardTaskDomain;
 
 public interface IRewardTaskService extends BaseService<RewardTaskDomain> {
 	public List<RewardTaskDomain> getRewardTasks(RewardTaskDomain rewardTaskDomain);
+
 }

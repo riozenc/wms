@@ -190,5 +190,29 @@
 			</if>
 		</where>
 	</select>
-	
+	<insert id="releaseRewardTasks" parameterType="RewardTaskDomain"
+		flushCache="true">
+		insert into
+		REWARD_TASK_INFO(PROJECT_ID,TASK_ID,TASK_NAME,CREATE_DATE,PLAN_DAYS,STATUS)
+		SELECT
+		PROJECT_TASK_REL.PROJECT_ID,PROJECT_TASK_REL.TASK_ID,TASK_INFO.TASK_NAME,#{createDate},TASK_INFO.PLAN_DAYS,1
+		FROM PROJECT_TASK_REL LEFT JOIN TASK_INFO ON PROJECT_TASK_REL.TASK_ID
+		= TASK_INFO.ID
+		<where>
+			<if test="id !=null">
+				and TASK_INFO.ID = #{id}
+			</if>
+		</where>
+	</insert>
+	<update id="release" parameterType="TaskDomain" flushCache="true">
+		update TASK_INFO
+		<set>
+			<if test="status !=null">
+				STATUS = #{status},
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+		</where>
+	</update>
 </mapper>

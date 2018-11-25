@@ -194,15 +194,40 @@
 		var releaseButton = Ext.create('Ext.Button',{
 			id : 'releaseButton',
 			text : '发布',
-			handler : function() {
+			handler : function(me) {
+				var datas = box._grid.selModel.selected.items;
+				var _taskIds = [];
+				Ext.Array.forEach(datas,function(item){
+					_taskIds.push(item.data);
+					//_taskIds += item.data.id + ",";
+				});
 				
-				
+				Ext.MessageBox.wait('Loadng','Please Wait...');
+				Ext.MessageBox.updateProgress(1);
+				Ext.Ajax.request({
+					url : 'task.do?method=releaseTasks',
+					//params : {taskIds : _taskIds},
+					jsonData : Ext.JSON.encode(_taskIds),
+					method : 'POST',
+					success : function(response,config) {
+						Ext.MessageBox.hide();
+						var json = Ext.JSON.decode(response.responseText);
+						if (json.statusCode==200) {
+							Ext.MessageBox.alert('提示',json.message);
+							reload();
+						} else {
+							Ext.MessageBox.alert('提示',json.msg);
+						}
+					},
+					dataType : 'json',
+					contentType : 'application/json;charset=UTF-8'
+				});
 			}
 		});
 		
 		var box = Ext.create('js.custom.basicDataLayout', {
-			_gridTbar : [addButton,releaseButton],
-			
+			_gridTbar : [addButton,'-',releaseButton],
+			_ischeckBox : true,//多选框
 			_formItems : [ {
 				xtype : 'datefield',
 				fieldLabel : '查询时间',
@@ -217,7 +242,8 @@
 			_gridColumns : [
 				{
 					text : 'ID',
-					dataIndex : 'id'
+					dataIndex : 'id',
+					hidden : true,
 				}, {
 					text : '任务编号',
 					dataIndex : 'taskNo'
@@ -239,6 +265,9 @@
 				}, {
 					text : '实际日',
 					dataIndex : 'actualDays'
+				}, {
+					text : '状态',
+					dataIndex : 'status'
 				}, {
 					text : '备注',
 					dataIndex : 'remark',

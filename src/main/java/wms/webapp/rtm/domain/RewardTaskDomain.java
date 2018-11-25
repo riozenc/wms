@@ -13,8 +13,8 @@ import com.riozenc.quicktool.mybatis.MybatisEntity;
 public class RewardTaskDomain implements MybatisEntity {
 	@TablePrimaryKey
 	private Long id;
-	private String projectNo;// PROJECT_NO char
-	private String taskNo;// TASK_NO char
+	private String projectId;// PROJECT_NO char
+	private String taskId;// TASK_NO char
 	private String taskName;// TASK_NAME char
 	private Date createDate;// CREATE_DATE datetime
 	private Integer planDays;// PLAN_DAYS int
@@ -33,20 +33,20 @@ public class RewardTaskDomain implements MybatisEntity {
 		this.id = id;
 	}
 
-	public String getProjectNo() {
-		return projectNo;
+	public String getProjectId() {
+		return projectId;
 	}
 
-	public void setProjectNo(String projectNo) {
-		this.projectNo = projectNo;
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
-	public String getTaskNo() {
-		return taskNo;
+	public String getTaskId() {
+		return taskId;
 	}
 
-	public void setTaskNo(String taskNo) {
-		this.taskNo = taskNo;
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 
 	public String getTaskName() {

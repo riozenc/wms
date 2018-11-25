@@ -31,6 +31,10 @@
 			} ],
 
 			_gridColumns : [ {
+				text : 'ID',
+				dataIndex : 'id',
+				hidden : true,
+			}, {
 				text : '任务名称',
 				dataIndex : 'taskName',
 	            sortable: true,
@@ -39,7 +43,7 @@
 	                return ((value === 0 || value > 1) ? '(' + value + ' Tasks)' : '(1 Task)');
 	            }
 			}, {
-				text : '负责人',
+				text : '承接人',
 				dataIndex : 'userName',
 			}, {
 				text : '创建时间',
@@ -57,33 +61,17 @@
 	            xtype: 'widgetcolumn',
 		        text:'操作',
 		        widget: {
-		            xtype : 'panel',
-		            layout : 'hbox',
-		            items : [{
-		            	xtype : 'button',
-			            text : '接取',
-			            flex : 1,
-			            // handle a click on the button itself
-			            handler: function(me,e) {
-			            	var data = me.$widgetRecord.data;
-			            	var tabs = parent.Ext.getCmp('infoPanel');
-							tabs.loadPanel({'id':data.projectNo,'menuUrl':'task.do?method=index&projectId='+data.id,'text':data.projectName});
-			            },
-		            },{
-		            	xtype : 'button',
-			            text : '放弃',
-			            flex : 1,
-			            // handle a click on the button itself
-			            handler: function(me,e) {
-			            	var data = me.$widgetRecord.data;
-			            	var tabs = parent.Ext.getCmp('infoPanel');
-							tabs.loadPanel({'id':data.projectNo,'menuUrl':'task.do?method=index&projectId='+data.id,'text':data.projectName});
-			            },
-		            }]
+		        	xtype : 'button',
+		            text : '接取',
+		            flex : 1,
+		            // handle a click on the button itself
+		            handler: function(me,e) {
+		            	var data = me.$widgetRecord.data;
+		            	
+		            },
 		        },
 		        renderer : function(a,b,c,d,e){
 		        	debugger;
-		        	alert(1);
 		        }
 			} ],
 

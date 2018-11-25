@@ -5,6 +5,8 @@
  **/
 package wms.webapp.rtm.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.riozenc.quicktool.annotation.TransactionDAO;
@@ -13,12 +15,16 @@ import com.riozenc.quicktool.annotation.TransactionService;
 import wms.webapp.rtm.dao.RewardTaskDAO;
 import wms.webapp.rtm.domain.RewardTaskDomain;
 import wms.webapp.rtm.service.IRewardTaskService;
+import wms.webapp.wrk.dao.TaskDAO;
+import wms.webapp.wrk.domain.TaskDomain;
 
 @TransactionService
 public class RewardTaskServiceImpl implements IRewardTaskService {
 
 	@TransactionDAO
 	private RewardTaskDAO rewardTaskDAO;
+	@TransactionDAO
+	private TaskDAO taskDAO;
 
 	@Override
 	public int insert(RewardTaskDomain t) {
