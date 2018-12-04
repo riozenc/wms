@@ -38,5 +38,10 @@ public class RewardTaskAction extends BaseAction {
 		List<RewardTaskDomain> list = rewardTaskService.getRewardTasks(rewardTaskDomain);
 		return list;
 	}
+	
+	//交付悬赏
+	public Object deliver() {
+		return null;
+	}
 
 }
