@@ -142,9 +142,80 @@
 			<if test="remark !=null">
 				and REWARD_TASK_INFO.REMARK = #{remark}
 			</if>
-			<if test="status !=null">
+			<if test="status=1">
 				and REWARD_TASK_INFO.STATUS = #{status}
 			</if>
 		</where>
+	</select>
+	<!--   -->
+	<update id="updateStatus" parameterType="int"
+		flushCache="true">
+		update REWARD_TASK_INFO
+		<set>
+			<if test="status=1">
+				STATUS = 2
+			</if>
+		</set>
+		<where>
+			and ID = #{id}
+		</where>
+	</update>
+	<select id="getRewardTasks2" resultType="RewardTaskDomain" useCache="true">
+		select *from REWARD_TASK_INFO where status=1
+	</select>
+	<select id="findById" resultType="RewardTaskDomain" parameterType="int" useCache="true">
+		select *from REWARD_TASK_INFO where ID=#{id}
+	</select>
+	
+	<insert id="insertRewardTaskUser" parameterType="RewardTaskUserDomain"
+		flushCache="true">
+		insert into
+		REWARD_TASK_USER_REL(REWARD_TASK_ID,USER_ID,START_DATE,END_DATE,ACTUAL_DAYS,REMARK,STATUS)
+		values
+		(#{rewardTaskId},#{userId},#{startDate},#{endDate},#{actualDays},#{remark},#{status})
+	</insert>
+	<select id="getMyTasks"  parameterType="String" resultType="RewardTaskUserDomain" flushCache="true"> 
+	select rtur.id,rtur.reward_task_id, rtur.user_id,rtur.start_date,rtur.remark,rtur.status,rti.task_name 
+	FROM REWARD_TASK_INFO rti , REWARD_TASK_USER_REL rtur  where rtur.REWARD_TASK_ID=rti.ID and rtur.user_id=#{id}
+	and rtur.status=2
+	</select>
+	<select id="getMyTasks2"  parameterType="String" resultType="RewardTaskUserDomain" flushCache="true"> 
+	select rtur.id,rtur.reward_task_id, rtur.user_id,rtur.start_date,rtur.remark,rtur.status,rti.task_name 
+	FROM REWARD_TASK_INFO rti , REWARD_TASK_USER_REL rtur  where rtur.REWARD_TASK_ID=rti.ID and rtur.user_id=#{id}
+	and rtur.status=3
+	</select>
+	<select id="getMyTasks3"  parameterType="String" resultType="RewardTaskUserDomain" flushCache="true"> 
+	select rtur.id,rtur.reward_task_id, rtur.user_id,rtur.start_date,rtur.remark,rtur.status,rti.task_name 
+	FROM REWARD_TASK_INFO rti , REWARD_TASK_USER_REL rtur  where rtur.REWARD_TASK_ID=rti.ID and rtur.user_id=#{id}
+	and rtur.status=4
+	</select>
+	<select id="getReviewTask"  parameterType="RewardTaskUserDomain" resultType="RewardTaskUserDomain" flushCache="true"> 
+	select rtur.id,rtur.reward_task_id, rtur.user_id,rtur.start_date,rtur.remark,rtur.status,rti.task_name ,pi.PROJECT_NAME,ui.USER_NAME
+	FROM REWARD_TASK_INFO rti , REWARD_TASK_USER_REL rtur,PROJECT_INFO pi,USER_INFO ui  where rtur.REWARD_TASK_ID=rti.ID AND rti.PROJECT_ID=pi.ID
+	and rtur.status=3 AND ui.USER_ID = rtur.USER_ID
+			<if test="userName !=null and userName !=''">
+				and ui.USER_NAME = #{userName}
+			</if>
+			<if test="projectName !=null and projectName !=''">
+				and pi.PROJECT_NAME = #{projectName}
+			</if>
+	</select>
+	<update id="updateRewardTaskStatus3" flushCache="true" >
+		update REWARD_TASK_USER_REL set STATUS=3 where reward_task_id=#{rewardTaskId}
+	</update>
+	<update id="updateRewardTaskUserStatus3" flushCache="true" >
+		update REWARD_TASK_INFO set STATUS=3 where ID=#{rewardTaskId}
+	</update>
+	<update id="updateRewardTaskStatus4" parameterType="RewardTaskUserDomain" flushCache="true" >
+		update REWARD_TASK_INFO set STATUS=4 where id=#{rewardTaskId}
+	</update>
+	<update id="updateRewardTaskUserStatus4" parameterType="RewardTaskUserDomain" flushCache="true" >
+		update  REWARD_TASK_USER_REL set STATUS=4 ,END_DATE=#{endDate},ACTUAL_DAYS=#{actualDays} where REWARD_TASK_ID=#{rewardTaskId}
+	</update>
+	<select id="getStartDate"   flushCache="true" resultType="RewardTaskUserDomain"> 
+	select rtur.START_DATE from REWARD_TASK_USER_REL rtur where reward_task_id=#{rewardTaskId}
+	</select>
+	<select id="getAllUserName"   flushCache="true" resultType="RewardTaskUserDomain"> 
+	select rtur.START_DATE from REWARD_TASK_USER_REL rtur where reward_task_id=#{rewardTaskId}
 	</select>
 </mapper>

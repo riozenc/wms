@@ -5,6 +5,8 @@
  **/
 package wms.webapp.sys.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +15,7 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +31,11 @@ import wms.web.result.HttpResult;
 @ControllerAdvice
 @RequestMapping("login")
 public class LoginAction {
+	@CrossOrigin(origins="http://172.21.29.43:8080",
+			 methods= {RequestMethod.GET,RequestMethod.OPTIONS,RequestMethod.POST},
+		     allowCredentials="true",
+		     allowedHeaders="Origin, Access-Token,X-Requested-With, Content-Type, Accept,x-access-token,x-url-path",
+			 maxAge=3600)
 	@ResponseBody
 	@RequestMapping(value = "/login")
 	public Object login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
@@ -93,5 +101,18 @@ public class LoginAction {
 			LoginFailCache.remove(useruame);
 		}
 		return loginFailNum >= 3;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getUser",method=RequestMethod.POST)
+	@CrossOrigin(origins="http://172.21.29.43:8080",
+				 methods= {RequestMethod.GET,RequestMethod.OPTIONS,RequestMethod.POST},
+			     allowCredentials="true",
+			     allowedHeaders="Origin, Access-Token,X-Requested-With, Content-Type, Accept,x-access-token,x-url-path",
+				 maxAge=3600)
+	public Principal getUser() {
+		Principal user = (Principal) SecurityUtils.getSubject().getPrincipal();
+		
+		return user;
 	}
 }
