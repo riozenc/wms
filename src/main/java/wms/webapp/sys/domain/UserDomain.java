@@ -16,9 +16,9 @@ import com.riozenc.quicktool.mybatis.MybatisEntity;
  */
 public class UserDomain implements MybatisEntity {
 	@TablePrimaryKey
-	private Long id;// ID 用户号 char(20) 20 TRUE FALSE TRUE
+	private Integer id;// ID 用户号 char(20) 20 TRUE FALSE TRUE
 	@TablePrimaryKey
-	private String userId;// USER_ID 用户自定义ID char(20) 20 TRUE FALSE TRUE
+	private String userAccount;// USER_ACCOUNT 用户自定义ID char(20) 20 TRUE FALSE TRUE
 	private String password;// 密码
 	private String phone;// PHONE 电话 char(11) 11 FALSE FALSE FALSE
 	private String mailAddress;// MAIL_ADDRESS 邮箱地址 char(20) 20 FALSE FALSE
@@ -29,20 +29,20 @@ public class UserDomain implements MybatisEntity {
 	private String remark;// 备注
 	private Integer status;// STATUS 状态 int FALSE FALSE FALSE
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserAccount() {
+		return userAccount;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserAccount(String userAccount) {
+		this.userAccount = userAccount;
 	}
 
 	public String getPassword() {

@@ -74,7 +74,7 @@ public class TaskServiceImpl implements ITaskService {
 		projectTaskDomain.setProjectId(projectId);
 		projectTaskDomain.setCreateDate(new Date());
 		Principal principal = (Principal) SecurityUtils.getSubject().getPrincipal();
-		projectTaskDomain.setOperatorId(principal.getId());
+		projectTaskDomain.setOperatorId(principal.getUserId());
 		return projectTaskDAO.insert(projectTaskDomain);
 	}
 

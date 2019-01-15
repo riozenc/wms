@@ -28,7 +28,7 @@ public class MenuDomain implements MybatisEntity {
 
 	@JsonIgnore
 	@ReflectionIgnore
-	private Long userId;
+	private Integer userId;
 
 	public Integer getId() {
 		return id;
@@ -86,14 +86,12 @@ public class MenuDomain implements MybatisEntity {
 		this.sortNo = sortNo;
 	}
 
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-
-	
 
 }

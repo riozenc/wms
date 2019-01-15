@@ -27,7 +27,7 @@ public class PasswordShiroRealm extends AbstractPasswordShiroRealm {
 		// 判断loginName
 		
 		UserDomain userDomain = new UserDomain();
-		userDomain.setUserId(loginName);
+		userDomain.setUserAccount(loginName);
 		return userService.getPassword(userDomain);
 	}
 
@@ -48,10 +48,11 @@ public class PasswordShiroRealm extends AbstractPasswordShiroRealm {
 		// TODO Auto-generated method stub
 		Principal principal = new Principal();
 		UserDomain userDomain = new UserDomain();
-		userDomain.setUserId(loginName);
+		userDomain.setUserAccount(loginName);
 		userDomain = userService.findByKey(userDomain);
 		userDomain.setPassword("Want password?");
-		principal.setUserId(userDomain.getUserId());
+		principal.setUserId(userDomain.getId());
+		principal.setUserAccount(userDomain.getUserAccount());
 		principal.setUserName(userDomain.getUserName());
 		principal.setPhone(userDomain.getPhone());
 		principal.setMailAddress(userDomain.getMailAddress());

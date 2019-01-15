@@ -53,7 +53,7 @@ public class LoginAction {
 				return loginFail("IncorrectCredentialsException", httpServletRequest, httpServletResponse);
 			}
 
-			LoginSessionCache.put(principal.getUserId(), subject.getSession().getId());
+			LoginSessionCache.put(principal.getUserAccount(), subject.getSession().getId());
 
 			return new HttpResult(HttpResult.SUCCESS, "登录成功,欢迎" + principal.getUserName() + "!");
 		} else {

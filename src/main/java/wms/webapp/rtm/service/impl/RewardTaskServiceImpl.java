@@ -89,7 +89,7 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 			rewardTaskUserDomain.setRewardTaskId(id);
 			rewardTaskUserDomain.setStatus(list.get(0).getStatus());
 			rewardTaskUserDomain.setRemark(list.get(0).getRemark());
-			rewardTaskUserDomain.setUserId(user.getUserId());
+			rewardTaskUserDomain.setUserAccount(user.getUserAccount());
 			Date date = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		    String dateString = formatter.format(date);
@@ -99,24 +99,24 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 		}
 		public List<RewardTaskUserDomain> getUndoTasks(){
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
-			String userId=user.getUserId();
-			List<RewardTaskUserDomain> list=rewardTaskDAO.getUndoTasks(userId);
+			String userAccount=user.getUserAccount();
+			List<RewardTaskUserDomain> list=rewardTaskDAO.getUndoTasks(userAccount);
 			System.out.println("list.size:"+list.size());
 			System.out.println(list.get(0).getStatus());
 			return list;
 		}
 		public List<RewardTaskUserDomain> getUnderReviewTasks(){
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
-			String userId=user.getUserId();
-			List<RewardTaskUserDomain> list=rewardTaskDAO.getUnderReviewTasks(userId);
+			String userAccount=user.getUserAccount();
+			List<RewardTaskUserDomain> list=rewardTaskDAO.getUnderReviewTasks(userAccount);
 			System.out.println("list.size:"+list.size());
 			System.out.println(list.get(0).getStatus());
 			return list;
 		}
 		public List<RewardTaskUserDomain> getAccomplishedTasks(){
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
-			String userId=user.getUserId();
-			List<RewardTaskUserDomain> list=rewardTaskDAO.getAccomplishedTasks(userId);
+			String userAccount=user.getUserAccount();
+			List<RewardTaskUserDomain> list=rewardTaskDAO.getAccomplishedTasks(userAccount);
 			System.out.println("list.size:"+list.size());
 			System.out.println(list.get(0).getStatus());
 			return list;

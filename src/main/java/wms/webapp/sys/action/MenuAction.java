@@ -19,7 +19,6 @@ import com.riozenc.quicktool.shiro.Principal;
 import com.riozenc.quicktool.springmvc.webapp.action.BaseAction;
 
 import wms.webapp.sys.domain.MenuDomain;
-import wms.webapp.sys.domain.UserDomain;
 import wms.webapp.sys.service.IMenuService;
 
 /**
@@ -42,35 +41,35 @@ public class MenuAction extends BaseAction {
 		return "menu.jsp";
 	}
 
-	
 	@ResponseBody
 	@RequestMapping(params = "method=getRootMenu")
 	public Object getRootMenu(MenuDomain menuDomain) {
-
 		Subject subject = SecurityUtils.getSubject();
 		Principal principal = (Principal) subject.getPrincipal();
-		UserDomain userDomain = new UserDomain();
-		userDomain.setUserId(principal.getUserId());
 		menuDomain.setParentId(0);
-		menuDomain.setUserId(userDomain.getId());
+		menuDomain.setUserId(principal.getUserId());
 		List<MenuDomain> list = menuService.getMenu(menuDomain);
-
 		return list;
 	}
 
 	@ResponseBody
 	@RequestMapping(params = "method=getSubMenu")
 	public Object getSubMenu(MenuDomain menuDomain) {
-
 		Subject subject = SecurityUtils.getSubject();
 		Principal principal = (Principal) subject.getPrincipal();
-		UserDomain userDomain = new UserDomain();
-		userDomain.setUserId(principal.getUserId());
-
-		menuDomain.setUserId(userDomain.getId());
-		
+		menuDomain.setUserId(principal.getUserId());
 		List<MenuDomain> list = menuService.getMenu(menuDomain);
+		return list;
+	}
 
+	@ResponseBody
+	@RequestMapping(params = "method=getMenu")
+	public Object getMenu() {
+		MenuDomain menuDomain = new MenuDomain();
+		Subject subject = SecurityUtils.getSubject();
+		Principal principal = (Principal) subject.getPrincipal();
+		menuDomain.setUserId(principal.getUserId());
+		List<MenuDomain> list = menuService.getMenu(menuDomain);
 		return list;
 	}
 

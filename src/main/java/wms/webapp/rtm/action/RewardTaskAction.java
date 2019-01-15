@@ -94,7 +94,7 @@ public class RewardTaskAction extends BaseAction {
 	@RequestMapping(params="method=getReviewTasks")
 	public List<RewardTaskUserDomain> getReviewTasks(HttpServletRequest req){
 		RewardTaskUserDomain rewardTaskUserDomain=new RewardTaskUserDomain();
-		rewardTaskUserDomain.setUserId(req.getParameter("userId"));
+		rewardTaskUserDomain.setUserAccount(req.getParameter("userId"));
 		rewardTaskUserDomain.setUserName(req.getParameter("userName"));
 		//rewardTaskUserDomain.setProjectName(req.getParameter("projectName"));
 		List<RewardTaskUserDomain> list= rewardTaskService.getReviewTask(rewardTaskUserDomain);
