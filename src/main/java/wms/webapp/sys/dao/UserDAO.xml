@@ -4,25 +4,25 @@
 	<select id="findByKey" parameterType="UserDomain"
 		resultType="UserDomain" useCache="true">
 		select
-		ID,USER_ID,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		ID,USER_ACCOUNT,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
 		from USER_INFO
 		<where>
 
-			and USER_ID = #{userId}
+			and USER_ACCOUNT = #{userAccount}
 
 		</where>
 	</select>
 	<select id="findByWhere" parameterType="UserDomain"
 		resultType="UserDomain" useCache="true">
 		select
-		ID,USER_ID,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		ID,USER_ACCOUNT,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
 		from USER_INFO
 		<where>
 			<if test="id !=null">
 				and ID = #{id}
 			</if>
-			<if test="userId !=null">
-				and USER_ID = #{userId}
+			<if test="userAccount !=null">
+				and USER_ACCOUNT = #{userAccount}
 			</if>
 			<if test="password !=null">
 				and PASSWORD = #{password}
@@ -53,9 +53,9 @@
 	</select>
 	<insert id="insert" parameterType="UserDomain" flushCache="true">
 		insert into
-		USER_INFO(ID,USER_ID,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
+		USER_INFO(ID,USER_ACCOUNT,PASSWORD,PHONE,MAIL_ADDRESS,USER_NAME,SEX,IMAGE_URL,REMARK,STATUS
 		) values
-		(#{id},#{userId},#{password},#{phone},#{mailAddress},#{userName},#{sex},#{imageUrl},#{remark},#{status})
+		(#{id},#{userAccount},#{password},#{phone},#{mailAddress},#{userName},#{sex},#{imageUrl},#{remark},#{status})
 	</insert>
 	<update id="update" parameterType="UserDomain" flushCache="true">
 		update USER_INFO
@@ -89,7 +89,7 @@
 		<where>
 			and ID = #{id}
 
-			and USER_ID = #{userId}
+			and USER_ACCOUNT = #{userAccount}
 
 		</where>
 	</update>
@@ -98,7 +98,7 @@
 		<where>
 			and ID = #{id}
 
-			and USER_ID = #{userId}
+			and USER_ACCOUNT = #{userAccount}
 
 		</where>
 	</delete>
@@ -109,7 +109,7 @@
 		PASSWORD
 		from USER_INFO
 		<where>
-			and USER_ID = #{userId}
+			and USER_ACCOUNT = #{userAccount}
 
 		</where>
 	</select>
