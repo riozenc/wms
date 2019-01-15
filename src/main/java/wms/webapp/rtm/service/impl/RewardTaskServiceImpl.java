@@ -77,11 +77,13 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 			return rewardTaskDAO.updateStatus(id);
 			
 		}
+		
 		public List<RewardTaskDomain> getRewardTasks2() {
 			// TODO Auto-generated method stub
 			return rewardTaskDAO.getRewardTasks2();
 			
 		}
+		
 		public int insertRewardTaskUser(int id) {
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
 			RewardTaskUserDomain rewardTaskUserDomain =new RewardTaskUserDomain();
@@ -97,6 +99,7 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 			rewardTaskDAO.insertRewardTaskUser(rewardTaskUserDomain);
 			return 0;
 		}
+		
 		public List<RewardTaskUserDomain> getUndoTasks(){
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
 			String userAccount=user.getUserAccount();
@@ -105,6 +108,7 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 			System.out.println(list.get(0).getStatus());
 			return list;
 		}
+		
 		public List<RewardTaskUserDomain> getUnderReviewTasks(){
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
 			String userAccount=user.getUserAccount();
@@ -113,6 +117,7 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 			System.out.println(list.get(0).getStatus());
 			return list;
 		}
+		
 		public List<RewardTaskUserDomain> getAccomplishedTasks(){
 			Principal user =   (Principal) SecurityUtils.getSubject().getPrincipal();
 			String userAccount=user.getUserAccount();
@@ -121,11 +126,13 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 			System.out.println(list.get(0).getStatus());
 			return list;
 		}
+		
 		public int UpdateStatusForSubmit(int rewardTaskId) {
 			
 			 rewardTaskDAO.updateRewardTaskStatus3(rewardTaskId);
 			 return rewardTaskDAO.updateRewardTaskUserStatus3(rewardTaskId);
 		}
+		
 		public List<RewardTaskUserDomain> getReviewTask(RewardTaskUserDomain rewardTaskUserDomain) {
 			List<RewardTaskUserDomain> list=rewardTaskDAO.getReviewTask(rewardTaskUserDomain);
 			return list;
@@ -145,8 +152,7 @@ public class RewardTaskServiceImpl implements IRewardTaskService {
 				rewardTaskUserDomain.setEndDate(date);
 				rewardTaskUserDomain.setRewardTaskId(rewardTaskId);
 			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("鎶ラ敊");
+				
 				e.printStackTrace();
 			}
 			
