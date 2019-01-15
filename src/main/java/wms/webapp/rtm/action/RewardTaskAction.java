@@ -56,27 +56,31 @@ public class RewardTaskAction extends BaseAction {
 	//liu
 	@ResponseBody
 	@RequestMapping(params = "method=acceptTask")
-	public int acceptTask(HttpServletRequest req) throws  IOException {
-		int id=Integer.parseInt(req.getParameter("id"));
+	public int acceptTask(RewardTaskUserDomain rewardTaskUserDomain) throws  IOException {
+		int id=rewardTaskUserDomain.getId();
 		rewardTaskService.updateStatus(id);
 		rewardTaskService.insertRewardTaskUser(id);
 		return 0;
 		
 	}
+	
 	@RequestMapping(params = "method=getMyTask")
 	public String getMyTask() {
 		return "myTask.jsp";
 	}
+	
 	@RequestMapping(params = "method=getReviewTask")
 	public String getReviewTask() {
 		return "reviewTask.jsp";
 	}
+	
 	@ResponseBody
 	@RequestMapping(params="method=getUndoTasks")
 	public List<RewardTaskUserDomain> getUndoTasks(){
 		List<RewardTaskUserDomain> list= rewardTaskService.getUndoTasks();
 		return list;
 	}
+	
 	@ResponseBody
 	@RequestMapping(params="method=getUnderReviewTasks")
 	public List<RewardTaskUserDomain> getUnderReviewTasks(){
@@ -84,37 +88,35 @@ public class RewardTaskAction extends BaseAction {
 		List<RewardTaskUserDomain> list= rewardTaskService.getUnderReviewTasks();
 		return list;
 	}
+	
 	@ResponseBody
 	@RequestMapping(params="method=getAccomplishedTasks")
 	public List<RewardTaskUserDomain> getAccomplishedTasks(){
 		List<RewardTaskUserDomain> list= rewardTaskService.getAccomplishedTasks();
 		return list;
 	}
+	
 	@ResponseBody
 	@RequestMapping(params="method=getReviewTasks")
-	public List<RewardTaskUserDomain> getReviewTasks(HttpServletRequest req){
-		RewardTaskUserDomain rewardTaskUserDomain=new RewardTaskUserDomain();
-		rewardTaskUserDomain.setUserAccount(req.getParameter("userId"));
-		rewardTaskUserDomain.setUserName(req.getParameter("userName"));
-		//rewardTaskUserDomain.setProjectName(req.getParameter("projectName"));
+	public List<RewardTaskUserDomain> getReviewTasks(RewardTaskUserDomain rewardTaskUserDomain){
 		List<RewardTaskUserDomain> list= rewardTaskService.getReviewTask(rewardTaskUserDomain);
 		return list;
 	}
+	
 	@RequestMapping(params="method=submitTask")
-	public int submitTask(HttpServletRequest req) {
-		int rewardTaskId=Integer.parseInt(req.getParameter("rewardTaskId"));
+	public int submitTask(RewardTaskUserDomain rewardTaskUserDomain) {
+		int rewardTaskId=rewardTaskUserDomain.getRewardTaskId();
 		return rewardTaskService.UpdateStatusForSubmit(rewardTaskId);
 	}
+	
 	@ResponseBody
 	@RequestMapping(params="method=approved")
-	public int approved(HttpServletRequest req) {
-		int rewardTaskId=Integer.parseInt(req.getParameter("rewardTaskId"));
+	public int approved(RewardTaskUserDomain rewardTaskUserDomain) {
+		int rewardTaskId=rewardTaskUserDomain.getRewardTaskId();
 		System.out.println(rewardTaskService.UpdateStatusForReview(rewardTaskId));
-		
 		return rewardTaskService.UpdateStatusForReview(rewardTaskId);
-		
-		
 	}
+	
 	@ResponseBody
 	@RequestMapping(params="method=getAllUserName")
 	public List<RewardTaskUserDomain> getAllUserName(){

@@ -9,6 +9,13 @@ public class RewardTaskUserDomain implements MybatisEntity {
 	private String taskName;
 	private String projectName;
 	private String userName;
+	private int id;
+	private String userAccount;
+	private String startDate;
+	private String endDate;
+	private int actualDays;
+	private String remark;
+	private int status;
 
 	public String getUserName() {
 		return userName;
@@ -25,9 +32,7 @@ public class RewardTaskUserDomain implements MybatisEntity {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-
-	private int id;
-
+	
 	public int getId() {
 		return id;
 	}
@@ -43,13 +48,6 @@ public class RewardTaskUserDomain implements MybatisEntity {
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
-
-	private String userAccount;
-	private String startDate;
-	private String endDate;
-	private int actualDays;
-	private String remark;
-	private int status;
 
 	public int getRewardTaskId() {
 		return rewardTaskId;
