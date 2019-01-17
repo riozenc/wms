@@ -32,9 +32,10 @@ public class WmsCorsFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
-
+		
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
+		System.out.println("Access-Control-Request-Headers:"+request.getHeader("Access-Control-Request-Headers"));
 		System.out.println("origin:"+request.getHeader("origin"));
 		response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");

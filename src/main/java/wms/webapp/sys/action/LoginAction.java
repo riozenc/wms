@@ -5,7 +5,8 @@
  **/
 package wms.webapp.sys.action;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,15 +32,11 @@ import wms.web.result.HttpResult;
 @ControllerAdvice
 @RequestMapping("login")
 public class LoginAction {
-	@CrossOrigin(origins="http://172.21.29.43:8080",
-			 methods= {RequestMethod.GET,RequestMethod.OPTIONS,RequestMethod.POST},
-		     allowCredentials="true",
-		     allowedHeaders="Origin, Access-Token,X-Requested-With, Content-Type, Accept,x-access-token,x-url-path",
-			 maxAge=3600)
+	@CrossOrigin(origins = "http://172.21.29.43:8080", methods = { RequestMethod.GET, RequestMethod.OPTIONS,
+			RequestMethod.POST }, allowCredentials = "true", allowedHeaders = "Origin, Access-Token,X-Requested-With, Content-Type, Accept,x-access-token,x-url-path", maxAge = 3600)
 	@ResponseBody
 	@RequestMapping(value = "/login")
 	public Object login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-	
 
 		String errorClassName = (String) httpServletRequest
 				.getAttribute(PasswordShiroFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
@@ -55,7 +52,11 @@ public class LoginAction {
 
 			LoginSessionCache.put(principal.getUserAccount(), subject.getSession().getId());
 
-			return new HttpResult(HttpResult.SUCCESS, "登录成功,欢迎" + principal.getUserName() + "!");
+			Map<String, Object> token = new HashMap<>();
+			token.put("statusCode", HttpResult.SUCCESS);
+			token.put("token", httpServletResponse.getHeader("Set-Cookie"));
+//			return new HttpResult(HttpResult.SUCCESS, "登录成功,欢迎" + principal.getUserName() + "!");
+			return token;
 		} else {
 			// 失败
 			return loginFail(errorClassName, httpServletRequest, httpServletResponse);
@@ -102,17 +103,14 @@ public class LoginAction {
 		}
 		return loginFailNum >= 3;
 	}
-	
+
 	@ResponseBody
-	@RequestMapping(value="/getUser",method=RequestMethod.POST)
-	@CrossOrigin(origins="http://172.21.29.43:8080",
-				 methods= {RequestMethod.GET,RequestMethod.OPTIONS,RequestMethod.POST},
-			     allowCredentials="true",
-			     allowedHeaders="Origin, Access-Token,X-Requested-With, Content-Type, Accept,x-access-token,x-url-path",
-				 maxAge=3600)
+	@RequestMapping(value = "/getUser", method = RequestMethod.POST)
+	@CrossOrigin(origins = "http://172.21.29.43:8080", methods = { RequestMethod.GET, RequestMethod.OPTIONS,
+			RequestMethod.POST }, allowCredentials = "true", allowedHeaders = "Origin, Access-Token,X-Requested-With, Content-Type, Accept,x-access-token,x-url-path", maxAge = 3600)
 	public Principal getUser() {
 		Principal user = (Principal) SecurityUtils.getSubject().getPrincipal();
-		
+
 		return user;
 	}
 }
